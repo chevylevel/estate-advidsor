@@ -18,12 +18,9 @@ export default function MainPage() {
     const [visibleDevs, setVisibleDevs] = useState(developers);
 
     const handleSelectLocation = (ids) => {
-        console.log('###### ids:', ids);
         const filteredDevs = developers.filter(({ location }) => {
-            console.log('######:', ids.includes(location.id));
             return ids.includes(location.id);
         });
-        console.log('######filteredDevs:', filteredDevs);
 
         setVisibleDevs(ids.length ? filteredDevs : developers);
     }

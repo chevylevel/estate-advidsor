@@ -7,12 +7,9 @@ export const Filters = ({ onSelect }) => {
     const [filters, setFilters] = useState([]);
 
     const handleSelect = (e) => {
-        console.log(e?.target?.checked, e?.target?.value);
-
         setFilters(
             (prev) => {
                 if (e?.target?.checked) {
-                    console.log('######prev:', prev);
                     return [...prev, e.target.value,];
                 }
 
