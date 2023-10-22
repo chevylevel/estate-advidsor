@@ -5,6 +5,8 @@ import { Modal } from '../src/components/Modal/Modal';
 import { WhatsappForm } from '../src/components/WhatsappForm/WhatsappForm';
 import { useModal } from '../src/hooks/useModal';
 import developers from '../src/mocks/developers';
+import { Filters } from '../src/components/Filters/Filters';
+import { useState } from 'react';
 
 export default function MainPage() {
     const {
@@ -12,6 +14,19 @@ export default function MainPage() {
         isOpen,
         handleClickCloseModal,
     } = useModal();
+
+    const [visibleDevs, setVisibleDevs] = useState(developers);
+
+    const handleSelectLocation = (ids) => {
+        console.log('###### ids:', ids);
+        const filteredDevs = developers.filter(({ location }) => {
+            console.log('######:', ids.includes(location.id));
+            return ids.includes(location.id);
+        });
+        console.log('######filteredDevs:', filteredDevs);
+
+        setVisibleDevs(ids.length ? filteredDevs : developers);
+    }
 
     return (
         <>
@@ -48,21 +63,25 @@ export default function MainPage() {
                     <button onClick={handleClickOpenModal}>Получить каталог с самыми лучшими предложениями</button>
                 </div>
 
+                <div style={{marginBottom: '20px'}}>
+                    <Filters onSelect={handleSelectLocation}/>
+                </div>
+
                 <List>
-                    {developers.map((developer) => {
+                    {visibleDevs.map((dev) => {
                         const {
                             name,
                             price,
                             location,
                             square,
                             isConstructionFinish
-                        } = developer;
+                        } = dev;
 
                         return  (
                             <DeveloperCard
                                 name={name}
                                 price={price}
-                                location={location}
+                                location={location.name}
                                 square={square}
                                 isConstructionFinish={isConstructionFinish}
                             />

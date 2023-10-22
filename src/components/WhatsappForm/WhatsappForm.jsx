@@ -6,7 +6,6 @@ export const WhatsappForm = ({ onClose }) => {
     const ref = useRef();
 
     useEffect(() => {
-        console.log('hi')
         const outsideClickListener = (e) => {
             const el = ref?.current;
 
