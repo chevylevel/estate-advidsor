@@ -5,7 +5,7 @@ const AdminPage = () => {
         e.preventDefault();
 
         try {
-            await fetch('http://localhost:4000/api/realties', {
+            await fetch('https://still-brook-86141-2b88ed3bf4ec.herokuapp.com/api/realties', {
                 method: 'POST',
                 body: new FormData(e.target.form),
             });
