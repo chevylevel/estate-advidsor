@@ -104,13 +104,7 @@ export default function MainPage({ realties = [] }) {
 }
 
 export const getStaticProps = (async (context) => {
-        const res = await fetch(`${HOST}/api/realties`, {
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'Host': '*.herokuapp.com',
-                'Accept': 'application/json'
-            },
-        });
+        const res = await fetch(`${HOST}/api/realties`);
 
         let realties = [];
 
