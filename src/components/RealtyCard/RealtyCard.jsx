@@ -113,7 +113,7 @@ export const RealtyCard = ({
                 className={realtyCard.editButton}
                 onClick={handleEdit}
             >
-                {isEditMode ? 'cancel editing' : 'edit'}
+                {isEditMode ? 'close editing' : 'edit'}
             </button>
 
             <button
