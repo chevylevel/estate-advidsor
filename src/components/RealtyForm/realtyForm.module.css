@@ -1,0 +1,31 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: center;
+    background-color: #fefefe;
+    padding: 0 50px 50px;
+}
+
+.label {
+    position: absolute;
+    top: -15px;
+    left: 0;
+    font-size: x-small;
+    white-space: nowrap;
+}
+
+.inputField {
+    width: 100%;
+    font-size: large;
+}
+
+.submitButton {
+    padding-top: 40px;
+    align-self: center;
+}
+
+.bottomGap {
+    height: 30px;
+    background-color: transparent;
+}

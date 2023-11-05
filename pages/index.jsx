@@ -1,28 +1,41 @@
-import { DeveloperCard } from '../src/components/Developer/DeveloperCard';
 import { Textarea } from '../src/components/Textarea/Textarea';
-import { List } from '../src/components/List/List';
 import { Modal } from '../src/components/Modal/Modal';
 import { WhatsappForm } from '../src/components/WhatsappForm/WhatsappForm';
 import { useModal } from '../src/hooks/useModal';
-import developers from '../src/mocks/developers';
 import { Filters } from '../src/components/Filters/Filters';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { HOST } from '../constants';
+import RealtyList from '../src/components/RealtyList/RealtyList';
+import RealtyForm from '../src/components/RealtyForm/RealtyForm';
 
-export default function MainPage() {
+export default function MainPage({ realties }) {
     const {
-        handleClickOpenModal,
-        isOpen,
-        handleClickCloseModal,
+        handleClickOpenModal: handleClickOpenWatsappForm,
+        isOpen: isOpenWatsappFrom,
+        handleClickCloseModal: handleClickCloseWatsappForm,
     } = useModal();
 
-    const [visibleDevs, setVisibleDevs] = useState(developers);
+    const {
+        handleClickOpenModal: handleClickOpenRealtyForm,
+        isOpen: isOpenRealtyForm,
+        handleClickCloseModal: handleClickCloseRealtyForm,
+    } = useModal();
+
+    const [visibleRealties, setvisibleRealties] = useState(realties);
+
+    useEffect(
+        () => {
+            setvisibleRealties(realties);
+        },
+        [realties],
+    );
 
     const handleSelectLocation = (ids) => {
-        const filteredDevs = developers.filter(({ location }) => {
+        const filteredRealties = realties.filter(({ location }) => {
             return ids.includes(location.id);
         });
 
-        setVisibleDevs(ids.length ? filteredDevs : developers);
+        setvisibleRealties(ids.length ? filteredRealties : realties);
     }
 
     return (
@@ -48,7 +61,7 @@ export default function MainPage() {
                 <div style={{display: 'flex', justifyContent: 'center'}}>
                     <Textarea
                         labelText={'Подберите себе недвижимость, указав любые желаемые параметры:'}
-                        value={`Виллу в 5 минутах от океана, на две спальни, стоимостью до $150000, в Чангу`}
+                        initialValue={`Виллу в 5 минутах от океана, на две спальни, стоимостью до $150000, в Чангу`}
                     />
                 </div>
 
@@ -57,42 +70,42 @@ export default function MainPage() {
                     display: 'flex',
                     justifyContent: 'center'
                 }}>
-                    <button onClick={handleClickOpenModal}>Получить каталог с самыми лучшими предложениями</button>
+                    <button onClick={handleClickOpenWatsappForm}>Получить каталог с самыми лучшими предложениями</button>
                 </div>
 
-                <div style={{marginBottom: '20px'}}>
+                <div style={{ marginBottom: '20px' }}>
                     <Filters onSelect={handleSelectLocation}/>
                 </div>
 
-                <List>
-                    {visibleDevs.map((dev) => {
-                        const {
-                            name,
-                            price,
-                            location,
-                            square,
-                            isConstructionFinish
-                        } = dev;
+                <div style={{ display: 'flex', justifyContent: 'center' ,margin: '50px' }}>
+                    <button onClick={handleClickOpenRealtyForm}>
+                        добавить недвижимость
+                    </button>
+                </div>
 
-                        return  (
-                            <DeveloperCard
-                                name={name}
-                                price={price}
-                                location={location.name}
-                                square={square}
-                                isConstructionFinish={isConstructionFinish}
-                            />
-                        );
-                    })}
-                </List>
+                <RealtyList realties={visibleRealties} />
             </div>
 
             <Modal
-                isOpen={isOpen}
-                onClose={handleClickCloseModal}
+                isOpen={isOpenWatsappFrom}
+                onClose={handleClickCloseWatsappForm}
             >
-                <WhatsappForm onClose={handleClickCloseModal}/>
+                <WhatsappForm onClose={handleClickCloseWatsappForm}/>
+            </Modal>
+
+            <Modal
+                isOpen={isOpenRealtyForm}
+                onClose={handleClickCloseRealtyForm}
+            >
+                <RealtyForm onClose={handleClickCloseRealtyForm}/>
             </Modal>
         </>
     );
 }
+
+export const getStaticProps = (async (context) => {
+    const res = await fetch(`${HOST}/api/realties`)
+    const realties = await res.json()
+
+    return { props: { realties } }
+});

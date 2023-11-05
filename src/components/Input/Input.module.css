@@ -2,6 +2,7 @@
     position: relative;
     display: flex;
     justify-content: center;
+    margin-top: 15px;
 }
 
 .label {
@@ -9,6 +10,7 @@
     top: -15px;
     left: 0;
     font-size: x-small;
+    white-space: nowrap;
 }
 
 .inputField {

@@ -20,7 +20,7 @@ export const locations = [
         id: 5,
     },
     {
-        name: 'Nusa Dua',
+        name: 'Nusa-Dua',
         id: 6,
     },
 ];

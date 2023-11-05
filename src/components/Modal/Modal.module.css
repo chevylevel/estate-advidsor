@@ -4,6 +4,7 @@
 
 .open {
     display: flex;
+    height:fit-content;
     align-items: center;
     justify-content: center;
     z-index: 1;
@@ -14,14 +15,31 @@
     left: 0;
     margin: auto;
     background-color: rgb(0, 0, 0, 0.4);
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+}
+
+.content:before {
+    content: "";
+    display: block;
+    height: 15px;
+    background: transparent;
+}
+
+.content {
+    position: relative;
+    max-height: 100%;
+}
+
+.content:after {
+    content: "";
+    display: block;
+    height: 15px;
+    background: transparent;
 }
 
 .closeButton {
     position: absolute;
     right: 5px;
     z-index: 1;
-}
-
-.content {
-    position: relative;
 }

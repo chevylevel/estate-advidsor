@@ -1,0 +1,19 @@
+.content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding:0 50px 50px;
+    border: solid 1px #ef9900;
+}
+
+.editButton {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.deleteButton {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
