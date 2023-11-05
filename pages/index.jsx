@@ -9,7 +9,7 @@ import RealtyForm from '../src/components/RealtyForm/RealtyForm';
 import RealtyList from '../src/components/RealtyList/RealtyList';
 import PageLayout from '../src/components/PageLayout/PageLayout';
 
-export default function MainPage({ realties }) {
+export default function MainPage({ realties = [] }) {
     const {
         handleClickOpenModal: handleClickOpenWatsappForm,
         isOpen: isOpenWatsappFrom,
@@ -104,8 +104,19 @@ export default function MainPage({ realties }) {
 }
 
 export const getStaticProps = (async (context) => {
-    const res = await fetch(`${HOST}/api/realties`)
-    const realties = await res.json()
+        const res = await fetch(`${HOST}/api/realties`, {
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Host': 'https://*.vercel.app/',
+                'Accept': 'application/json'
+            },
+        });
 
-    return { props: { realties } }
+        let realties = [];
+
+        if (res.status === 200) {
+            realties = await res.json();
+        }
+
+        return { props: { realties } }
 });
