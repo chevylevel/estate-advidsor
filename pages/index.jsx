@@ -107,7 +107,7 @@ export const getStaticProps = (async (context) => {
         const res = await fetch(`${HOST}/api/realties`, {
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                'Host': 'https://*.vercel.app/',
+                'Host': '*.herokuapp.com',
                 'Accept': 'application/json'
             },
         });
