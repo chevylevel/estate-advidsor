@@ -5,8 +5,9 @@ import { useModal } from '../src/hooks/useModal';
 import { Filters } from '../src/components/Filters/Filters';
 import { useEffect, useState } from 'react';
 import { HOST } from '../constants';
-import RealtyList from '../src/components/RealtyList/RealtyList';
 import RealtyForm from '../src/components/RealtyForm/RealtyForm';
+import RealtyList from '../src/components/RealtyList/RealtyList';
+import PageLayout from '../src/components/PageLayout/PageLayout';
 
 export default function MainPage({ realties }) {
     const {
@@ -39,12 +40,11 @@ export default function MainPage({ realties }) {
     }
 
     return (
-        <>
+        <PageLayout>
             <div style={{padding: '0 50px'}}>
                 <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        margin: '50px 0',
                         alignItems: 'center',
                     }}
                 >
@@ -99,7 +99,7 @@ export default function MainPage({ realties }) {
             >
                 <RealtyForm onClose={handleClickCloseRealtyForm}/>
             </Modal>
-        </>
+        </PageLayout>
     );
 }
 

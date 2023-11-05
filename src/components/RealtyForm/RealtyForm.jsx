@@ -20,11 +20,16 @@ const RealtyForm = ({
     const handleClickSubmit = async (e) => {
         e.preventDefault();
 
+        const host = `${HOST}/api/realties/${isEdit ? initialRealty.id : ''}`;
+
         try {
-            const response = await fetch(`${HOST}/api/realties/${isEdit ? initialRealty.id : ''}`, {
-                method: isEdit ? 'PUT' : 'POST',
-                body: new FormData(e.target.form),
-            });
+            const response = await fetch(
+                host,
+                {
+                    method: isEdit ? 'PUT' : 'POST',
+                    body: new FormData(e.target.form),
+                }
+            );
 
             if (response.ok) {
                 onSubmit();
@@ -66,7 +71,7 @@ const RealtyForm = ({
 
                 <div style={{  marginTop: '10px', display: 'flex', flexDirection: 'column' }}>
                     <label
-                        for='realty-type-select'
+                        htmlFor='realty-type-select'
                         style={{marginRight: '10px', fontSize: 'x-small'}}
                     >
                         Тип недвижимости
@@ -82,7 +87,7 @@ const RealtyForm = ({
                 <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'space-between'}}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <label
-                            for='ownership'
+                            htmlFor='ownership'
                             style={{ marginRight: '10px', fontSize: 'x-small' }}
                         >
                             Тип  владения
@@ -240,7 +245,10 @@ const RealtyForm = ({
 
             {isEdit
                 ? initialRealty.images.map(image =>
-                    <div style={{position: 'relative'}}>
+                    <div
+                        key={image}
+                        style={{position: 'relative'}}
+                    >
                         <img src={`${HOST}/${image}`} />
                         <button
                             style={{ position: 'absolute', top: 0, right: 0 }}

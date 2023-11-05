@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import AdminPage from '../../../pages/admin';
 import realtyCard from './RealtyCard.module.css';
 import { HOST } from '../../../constants';
 import { useRouter } from 'next/router';
+import RealtyForm from '../RealtyForm/RealtyForm';
 
 export const RealtyCard = ({
     id,
@@ -63,7 +63,7 @@ export const RealtyCard = ({
         <div className={realtyCard.content} >
             { isEditMode
                 ? (
-                    <AdminPage
+                    <RealtyForm
                         initialRealty={{
                             id,
                             name,
@@ -104,7 +104,7 @@ export const RealtyCard = ({
 
                         <div>Количество спален: { bedrooms }</div>
 
-                        { images.map(image => <img src={`${HOST}/${image}`} />) }
+                        { images.map(image => <img key={image} src={`${HOST}/${image}`} />) }
                     </div>
                 )
             }

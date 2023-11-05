@@ -29,6 +29,7 @@ export const Filters = ({ onSelect }) => {
         <div className={filtersStyle.content}>
             { locations.map(({ id, name }) => (
                 <Input
+                    key={id}
                     type='checkbox'
                     labelText={name}
                     value={id}
