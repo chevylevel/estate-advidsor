@@ -103,7 +103,7 @@ export default function MainPage({ realties = [] }) {
     );
 }
 
-export const getStaticProps = (async (context) => {
+export const getServerSideProps = (async (context) => {
         const res = await fetch(`${HOST}/api/realties`);
 
         let realties = [];
