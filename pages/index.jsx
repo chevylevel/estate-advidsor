@@ -97,7 +97,7 @@ export default function MainPage({ realties = [] }) {
                 isOpen={isOpenRealtyForm}
                 onClose={handleClickCloseRealtyForm}
             >
-                <RealtyForm onClose={handleClickCloseRealtyForm}/>
+                <RealtyForm onSubmit={handleClickCloseRealtyForm} />
             </Modal>
         </PageLayout>
     );
