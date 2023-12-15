@@ -11,7 +11,6 @@ const AdminPage = ({}) => {
         try {
             const response = await UserService.fetchUsers();
 
-            console.log('response', response);
             setUsers(response?.data || [])
         } catch (error) {
 

@@ -18,10 +18,12 @@ function AppWrapper({ children }) {
                 callback: response => store.signInWithGoogle(response.credential),
             })
 
-            google.accounts.id.prompt();
-
             if (localStorage.getItem('token')) {
                 store.checkAuth();
+            }
+
+            if (!store.isAuth && !store.isLoading) {
+                google.accounts.id.prompt();
             }
         },
         [],
