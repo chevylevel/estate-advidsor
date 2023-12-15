@@ -2,6 +2,7 @@ import { createContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite';
 
 import Store from './store/Store';
+import { GOOGLE_CLIENT_ID } from '../config';
 
 export interface State {
     store: Store;
@@ -14,7 +15,7 @@ function AppWrapper({ children }) {
     useEffect(
         () => {
             google.accounts.id.initialize({
-                client_id: '756758641886-8sggl19esej4fg44bu5jgatdaagrrc9l.apps.googleusercontent.com',
+                client_id: GOOGLE_CLIENT_ID,
                 callback: response => store.signInWithGoogle(response.credential),
             })
 

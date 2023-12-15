@@ -2,6 +2,7 @@ import { useState } from 'react';
 import realtyCard from './RealtyCard.module.css';
 import { useRouter } from 'next/router';
 import RealtyForm from '../RealtyForm/RealtyForm';
+import { API_URL } from '../../../config';
 
 export const RealtyCard = ({
     id,
@@ -41,7 +42,7 @@ export const RealtyCard = ({
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`${procecc.env.HOST}/realties/${id}`, {
+            const response = await fetch(`${API_URL}/realties/${id}`, {
                 method: 'DELETE',
             });
 

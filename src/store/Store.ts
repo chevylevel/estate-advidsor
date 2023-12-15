@@ -4,6 +4,7 @@ import axios from 'axios';
 import { User } from '../models/User';
 import AuthService from '../services/AuthService';
 import { AuthResponse } from '../models/AuthResponse';
+import { API_URL } from '../../config';
 
 export default class Store {
     user = {} as User;
@@ -82,8 +83,9 @@ export default class Store {
     async checkAuth() {
         try {
             this.setIsLoading(true);
+            console.log(`${API_URL}/refresh`);
 
-            const response = await axios.get<AuthResponse>(`${process.env.HOST}/refresh`, { withCredentials: true });
+            const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
 
             localStorage.setItem('token', response?.data?.accessToken);
 

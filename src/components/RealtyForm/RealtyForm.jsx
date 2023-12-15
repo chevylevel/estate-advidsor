@@ -3,6 +3,7 @@ import { Input } from '../Input/Input';
 import { useRouter } from 'next/router';
 import realtyForm from './realtyForm.module.css';
 import useClickOutside from '../../hooks/useClickOutside';
+import { API_URL } from '../../../config';
 
 const RealtyForm = ({
     initialRealty,
@@ -79,7 +80,7 @@ const RealtyForm = ({
     const handleClickSubmit = async (e) => {
         e.preventDefault();
 
-        const host = `${process.env.HOST}/realties/${isEdit ? initialRealty.id : ''}`;
+        const host = `${API_URL}/realties/${isEdit ? initialRealty.id : ''}`;
 
         const formData = new FormData(e.target.form);
         const imageUrls = await uploadImages(formData.getAll('images'));
@@ -114,7 +115,7 @@ const RealtyForm = ({
     const handleRemoveImage = async (image) => {
         try {
             const response = await fetch(
-                `${process.env.HOST}/realties/${initialRealty.id}/${image._id}/${image.public_id}`,
+                `${API_URL}/realties/${initialRealty.id}/${image._id}/${image.public_id}`,
                 {
                     method: 'PUT',
                 }

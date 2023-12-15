@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { AuthResponse } from '../models/AuthResponse';
+import { API_URL } from '../../config';
 
 const api = axios.create({
     withCredentials: true,
-    baseURL: process.env.HOST,
+    baseURL: API_URL,
 });
 
 api.interceptors.request.use((config) => {
@@ -23,7 +24,7 @@ api.interceptors.response.use(
             originalRequest._isRetry = true;
 
             try {
-                const response = await axios.get<AuthResponse>(`${process.env.HOST}/refresh`, { withCredentials: true });
+                const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
 
                 localStorage.setItem('token', response?.data?.accessToken);
 

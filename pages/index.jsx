@@ -11,6 +11,7 @@ import RealtyList from '../src/components/RealtyList/RealtyList';
 import PageLayout from '../src/components/PageLayout/PageLayout';
 import { AuthForm } from '../src/components/AuthForm/AuthForm';
 import { Context } from '../src/AppWrapper';
+import { API_URL } from '../config';
 
 function MainPage({ realties = [] }) {
     const { store } = useContext(Context);
@@ -136,7 +137,7 @@ function MainPage({ realties = [] }) {
 }
 
 export const getServerSideProps = (async (context) => {
-        const res = await fetch(`${process.env.HOST}/realties`);
+        const res = await fetch(`${API_URL}/realties`);
 
         let realties = [];
 
