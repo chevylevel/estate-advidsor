@@ -1,7 +1,7 @@
 .content {
-    position: relative;
     display: flex;
     flex-direction: column;
+    position: relative;
     justify-content: center;
     background-color: #fefefe;
     padding: 0 50px 50px;

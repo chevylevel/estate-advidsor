@@ -1,0 +1,7 @@
+.AuthForm {
+    display: flex;
+    flex-direction: column;
+    background-color: #fefefe;
+    position: relative;
+    padding: 50px;
+}

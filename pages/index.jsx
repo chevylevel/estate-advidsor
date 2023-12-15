@@ -1,19 +1,31 @@
+import { useContext, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+
 import { Textarea } from '../src/components/Textarea/Textarea';
 import { Modal } from '../src/components/Modal/Modal';
 import { WhatsappForm } from '../src/components/WhatsappForm/WhatsappForm';
 import { useModal } from '../src/hooks/useModal';
 import { Filters } from '../src/components/Filters/Filters';
-import { useEffect, useState } from 'react';
-import { HOST } from '../constants';
 import RealtyForm from '../src/components/RealtyForm/RealtyForm';
 import RealtyList from '../src/components/RealtyList/RealtyList';
 import PageLayout from '../src/components/PageLayout/PageLayout';
+import { AuthForm } from '../src/components/AuthForm/AuthForm';
+import { Context } from '../src/AppWrapper';
+import { HOST } from '../constants';
 
-export default function MainPage({ realties = [] }) {
+function MainPage({ realties = [] }) {
+    const { store } = useContext(Context);
+
     const {
         handleClickOpenModal: handleClickOpenWatsappForm,
         isOpen: isOpenWatsappFrom,
         handleClickCloseModal: handleClickCloseWatsappForm,
+    } = useModal();
+
+    const {
+        handleClickOpenModal: handleClickOpenAuthForm,
+        isOpen: isOpenAuthForm,
+        handleClickCloseModal: handleClickCloseAuthForm,
     } = useModal();
 
     const {
@@ -39,8 +51,22 @@ export default function MainPage({ realties = [] }) {
         setvisibleRealties(ids.length ? filteredRealties : realties);
     }
 
+    const authNode = store.isAuth ? (
+        <div>
+            <div>
+                {store.user?.email}
+            </div>
+            <button onClick={() => store.signOut()}>Выйти</button>
+        </div>
+    )
+    : (
+        <button onClick={handleClickOpenAuthForm}>Вход / Регистрация</button>
+    )
+
     return (
         <PageLayout>
+            {store.isLoading ? <div>Загрузка...</div> : authNode}
+
             <div style={{padding: '0 50px'}}>
                 <div style={{
                         display: 'flex',
@@ -94,6 +120,13 @@ export default function MainPage({ realties = [] }) {
             </Modal>
 
             <Modal
+                isOpen={isOpenAuthForm}
+                onClose={handleClickCloseAuthForm}
+            >
+                <AuthForm onClose={handleClickCloseAuthForm} />
+            </Modal>
+
+            <Modal
                 isOpen={isOpenRealtyForm}
                 onClose={handleClickCloseRealtyForm}
             >
@@ -104,7 +137,7 @@ export default function MainPage({ realties = [] }) {
 }
 
 export const getServerSideProps = (async (context) => {
-        const res = await fetch(`${HOST}/api/realties`);
+        const res = await fetch(`${HOST}/realties`);
 
         let realties = [];
 
@@ -114,3 +147,5 @@ export const getServerSideProps = (async (context) => {
 
         return { props: { realties } }
 });
+
+export default observer(MainPage);

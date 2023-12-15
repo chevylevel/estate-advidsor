@@ -1,20 +1,80 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { HOST } from '../../../constants';
 import { Input } from '../Input/Input';
 import { useRouter } from 'next/router';
 import realtyForm from './realtyForm.module.css';
+import useClickOutside from '../../hooks/useClickOutside';
 
 const RealtyForm = ({
     initialRealty,
     isEdit = false,
     onSubmit,
 }) => {
-    const [isFreehold, setIsFreehold] = useState(true);
-
     const router = useRouter();
+    const ref = useRef();
+
+    useClickOutside(ref, onSubmit);
+
+    const [isFreehold, setIsFreehold] = useState(true);
 
     const refreshData = () => {
         router.replace(router.asPath, {}, { scroll: false });
+    }
+
+    const getSignData = async () => {
+        const {
+            apikey,
+            timestamp,
+            signature,
+            cloudname,
+        } = await signResponse.json();
+
+        return {
+            url: `https://api.cloudinary.com/v1_1/${cloudname}/auto/upload`,
+            apikey,
+            timestamp,
+            signature,
+        }
+    }
+
+    const uploadImages = async (imageFiles) => {
+        if (!imageFiles.length) {
+            return [];
+        }
+
+        const {
+            url,
+            apikey,
+            timestamp,
+            signature,
+        } = await getSignData();
+
+        const imagesFormData = new FormData();
+
+        const urlImages = imageFiles.map(async (file) => {
+            imagesFormData.append('file', file);
+            imagesFormData.append('api_key', apikey);
+            imagesFormData.append('timestamp', timestamp);
+            imagesFormData.append('signature', signature);
+            imagesFormData.append('folder', 'realty_images');
+
+            const imageUploadResponse = await fetch(url, {
+                method: 'POST',
+                body: imagesFormData,
+            });
+
+            const {
+                secure_url,
+                public_id,
+            } = await imageUploadResponse.json();
+
+            return {
+                secure_url,
+                public_id,
+            };
+        });
+
+        return Promise.all(urlImages);
     }
 
     const handleClickSubmit = async (e) => {
@@ -22,12 +82,20 @@ const RealtyForm = ({
 
         const host = `${HOST}/api/realties/${isEdit ? initialRealty.id : ''}`;
 
+        const formData = new FormData(e.target.form);
+        const imageUrls = await uploadImages(formData.getAll('images'));
+
+        formData.set('images', JSON.stringify(imageUrls));
+
         try {
+
+            console.log(...formData.entries('images'));
+
             const response = await fetch(
                 host,
                 {
                     method: isEdit ? 'PUT' : 'POST',
-                    body: new FormData(e.target.form),
+                    body: formData,
                 }
             );
 
@@ -46,9 +114,12 @@ const RealtyForm = ({
 
     const handleRemoveImage = async (image) => {
         try {
-            const response = await fetch(`${HOST}/api/realties/${initialRealty.id}/${image}`, {
-                method: 'PUT',
-            });
+            const response = await fetch(
+                `${HOST}/api/realties/${initialRealty.id}/${image._id}/${image.public_id}`,
+                {
+                    method: 'PUT',
+                }
+            );
 
             if (response.ok) {
                 refreshData();
@@ -56,10 +127,13 @@ const RealtyForm = ({
         } catch (error) {
             console.log('error:', error.message );
         }
-    }
+    };
 
     return (
-        <div className={realtyForm.content}>
+        <div
+            ref={ref}
+            className={realtyForm.content}
+        >
             <h3>Лот</h3>
 
             <form id='realty'>
@@ -67,12 +141,13 @@ const RealtyForm = ({
                     labelText={'Название'}
                     name={'name'}
                     inintialValue={initialRealty?.name}
+                    required
                 />
 
-                <div style={{  marginTop: '10px', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column' }}>
                     <label
                         htmlFor='realty-type-select'
-                        style={{marginRight: '10px', fontSize: 'x-small'}}
+                        style={{ marginRight: '10px', fontSize: 'x-small' }}
                     >
                         Тип недвижимости
                     </label>
@@ -84,7 +159,7 @@ const RealtyForm = ({
                     </select>
                 </div>
 
-                <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'space-between'}}>
+                <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <label
                             htmlFor='ownership'
@@ -119,18 +194,17 @@ const RealtyForm = ({
                             inintialValue={initialRealty?.squareMin}
                             labelText={'от'}
                             name={'squareMin'}
-                            required
                         />
 
                         <Input
                             labelText={'до'}
                             name={'squareMax'}
-                            required inintialValue={initialRealty?.squareMax}
+                            inintialValue={initialRealty?.squareMax}
                         />
                     </div>
                 </div>
 
-                <div style={{marginTop: '10px', fontSize: 'small'}}>
+                <div style={{ marginTop: '10px', fontSize: 'small' }}>
                     Стоимость
 
                     <div style={{ marginTop: '10px', display: 'flex', justifyContent:'space-between' }}>
@@ -138,19 +212,17 @@ const RealtyForm = ({
                             labelText={'от'}
                             name={'priceMin'}
                             inintialValue={initialRealty?.priceMin}
-                            required
                         />
 
                         <Input
                             labelText={'до'}
                             name={'priceMax'}
                             inintialValue={initialRealty?.priceMax}
-                            required
                         />
                     </div>
                 </div>
 
-                <div style={{marginTop: '10px', fontSize: 'small'}}>
+                <div style={{ marginTop: '10px', fontSize: 'small' }}>
                     ROI
 
                     <div style={{ marginTop: '10px', display: 'flex', justifyContent:'space-between' }}>
@@ -158,19 +230,17 @@ const RealtyForm = ({
                             labelText={'ROI Sale'}
                             name={'roiSale'}
                             inintialValue={initialRealty?.roiSale}
-                            required
                         />
 
                         <Input
                             labelText={'ROI Rent'}
                             name={'roiRent'}
                             inintialValue={initialRealty?.roiRent}
-                            required
                         />
                     </div>
                 </div>
 
-                <div style={{marginTop: '40px'}}>
+                <div style={{ marginTop: '40px' }}>
                     <Input
                         labelText={'Количество спален'}
                         name={'bedrooms'}
@@ -178,7 +248,15 @@ const RealtyForm = ({
                     />
                 </div>
 
-                <div style={{marginTop: '40px'}}>
+                <div style={{ marginTop: '40px' }}>
+                    <Input
+                        labelText={'Вид из окна'}
+                        name={'windowView'}
+                        inintialValue={initialRealty?.bedrooms}
+                    />
+                </div>
+
+                <div style={{ marginTop: '40px' }}>
                     <Input
                         labelText={'площадь участка'}
                         name={'landSquare'}
@@ -247,9 +325,10 @@ const RealtyForm = ({
                 ? initialRealty.images.map(image =>
                     <div
                         key={image}
-                        style={{position: 'relative'}}
+                        style={{ position: 'relative' }}
                     >
-                        <img src={`${HOST}/${image}`} />
+                        <img src={image.secure_url} />
+
                         <button
                             style={{ position: 'absolute', top: 0, right: 0 }}
                             onClick={() => handleRemoveImage(image)}
@@ -272,6 +351,6 @@ const RealtyForm = ({
             </div>
         </div>
     );
-}
+};
 
 export default RealtyForm;

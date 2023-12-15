@@ -17,6 +17,7 @@ export const RealtyCard = ({
     squareMin,
     squareMax,
     bedrooms,
+    windowView,
     landSquare,
     location,
     occupancy,
@@ -77,6 +78,7 @@ export const RealtyCard = ({
                             squareMin,
                             squareMax,
                             bedrooms,
+                            windowView,
                             landSquare,
                             location,
                             occupancy,
@@ -104,7 +106,7 @@ export const RealtyCard = ({
 
                         <div>Количество спален: { bedrooms }</div>
 
-                        { images.map(image => <img key={image} src={`${HOST}/${image}`} />) }
+                        { images.map(image => <img className={realtyCard.image} key={image} src={image.secure_url} />) }
                     </div>
                 )
             }

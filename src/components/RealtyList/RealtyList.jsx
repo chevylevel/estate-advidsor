@@ -18,6 +18,7 @@ const RealtyList = ({ realties }) => {
                     squareMin,
                     squareMax,
                     bedrooms,
+                    windowView,
                     landSquare,
                     location,
                     occupancy,
@@ -43,6 +44,7 @@ const RealtyList = ({ realties }) => {
                         squareMin={squareMin}
                         squareMax={squareMax}
                         bedrooms={bedrooms}
+                        windowView={windowView}
                         landSquare={landSquare}
                         location={location}
                         occupancy={occupancy}

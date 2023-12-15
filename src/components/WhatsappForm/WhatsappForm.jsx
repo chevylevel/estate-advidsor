@@ -1,34 +1,12 @@
 import { useEffect, useRef } from 'react';
 import whatsappForm from './WhatsappForm.module.css';
 import { Input } from '../Input/Input';
+import useClickOutside from '../../hooks/useClickOutside';
 
 export const WhatsappForm = ({ onClose }) => {
     const ref = useRef();
 
-    useEffect(() => {
-        const outsideClickListener = (e) => {
-            const el = ref?.current;
-
-            if (
-                !el
-                || el.contains(e.target)
-                || el.contains(e.composedPath()[0])
-            ) {
-                return;
-            }
-
-            onClose();
-
-        }
-
-        addEventListener('mousedown', outsideClickListener);
-        addEventListener('touchstart', outsideClickListener);
-
-        return () => {
-            removeEventListener('mousedown', outsideClickListener);
-            removeEventListener('touchstart', outsideClickListener);
-        }
-    }, [ref]);
+    useClickOutside(ref, onClose);
 
     return (
         <div
