@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react';
-import { HOST } from '../../../constants';
 import { Input } from '../Input/Input';
 import { useRouter } from 'next/router';
 import realtyForm from './realtyForm.module.css';
@@ -80,7 +79,7 @@ const RealtyForm = ({
     const handleClickSubmit = async (e) => {
         e.preventDefault();
 
-        const host = `${HOST}/api/realties/${isEdit ? initialRealty.id : ''}`;
+        const host = `${process.env.HOST}/realties/${isEdit ? initialRealty.id : ''}`;
 
         const formData = new FormData(e.target.form);
         const imageUrls = await uploadImages(formData.getAll('images'));
@@ -115,7 +114,7 @@ const RealtyForm = ({
     const handleRemoveImage = async (image) => {
         try {
             const response = await fetch(
-                `${HOST}/api/realties/${initialRealty.id}/${image._id}/${image.public_id}`,
+                `${process.env.HOST}/realties/${initialRealty.id}/${image._id}/${image.public_id}`,
                 {
                     method: 'PUT',
                 }

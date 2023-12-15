@@ -4,7 +4,6 @@ import axios from 'axios';
 import { User } from '../models/User';
 import AuthService from '../services/AuthService';
 import { AuthResponse } from '../models/AuthResponse';
-import { HOST } from '../../constants';
 
 export default class Store {
     user = {} as User;
@@ -84,7 +83,7 @@ export default class Store {
         try {
             this.setIsLoading(true);
 
-            const response = await axios.get<AuthResponse>(`${HOST}/refresh`, { withCredentials: true });
+            const response = await axios.get<AuthResponse>(`${process.env.HOST}/refresh`, { withCredentials: true });
 
             localStorage.setItem('token', response?.data?.accessToken);
 

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import realtyCard from './RealtyCard.module.css';
-import { HOST } from '../../../constants';
 import { useRouter } from 'next/router';
 import RealtyForm from '../RealtyForm/RealtyForm';
 
@@ -42,7 +41,7 @@ export const RealtyCard = ({
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`${HOST}/api/realties/${id}`, {
+            const response = await fetch(`${procecc.env.HOST}/realties/${id}`, {
                 method: 'DELETE',
             });
 
