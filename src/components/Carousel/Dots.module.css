@@ -1,0 +1,33 @@
+.content {
+    --dot-size: 7px;
+    display: flex;
+    height: var(--dot-size);
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0;
+}
+
+.dot {
+    flex-shrink: 0;
+    width: var(--dot-size);
+    background: #ffffff;
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: transform 0.2s ease;
+}
+
+.currentDot {
+    opacity: 1;
+}
+
+.smallDot {
+    transform: scale(0.7);
+}
+
+.mediumDot {
+    transform: scale(0.85);
+}
+
+.dot:not(:last-of-type){
+    margin-right: var(--dot-size);
+}

@@ -46,7 +46,7 @@ export const AuthForm = ({ onClose }) => {
 
             <div style={{ margin: '40px 0 20px' }}>
                 <Input
-                    labelText={'email'}
+                    label={'email'}
                     type={'text'}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -55,7 +55,7 @@ export const AuthForm = ({ onClose }) => {
 
             <div style={{ margin: '0 0 40px' }}>
                 <Input
-                    labelText={'Пароль'}
+                    label={'Пароль'}
                     type={'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

@@ -2,128 +2,121 @@ import { useState } from 'react';
 import realtyCard from './RealtyCard.module.css';
 import { useRouter } from 'next/router';
 import RealtyForm from '../RealtyForm/RealtyForm';
-import { API_URL } from '../../../config';
+import Carousel from '../Carousel/Carousel.tsx';
+
+import EditIcon from '~/public/images/edit.svg';
+import DeleteIcon from '~/public/images/delete.svg';
+import HeartIcon from '~/public/images/heart.svg';
+
+import { RealtyProp } from './RealtyProp';
+import { IconButton } from '../IconButton/IconButton';
+import RealtyService from '~/src/services/Realty';
 
 export const RealtyCard = ({
-    id,
-    name,
-    realtyType,
-    ownership,
-    ownershipPeriod,
-    roiSale,
-    roiRent,
-    priceMin,
-    priceMax,
-    squareMin,
-    squareMax,
-    bedrooms,
-    windowView,
-    landSquare,
-    location,
-    occupancy,
-    beachDistance,
-    livingPossibility,
-    constructionStatus,
-    description,
-    images,
+    realty,
+    onOpenRealtyForm,
 }) => {
-    const router = useRouter();
-    const [isEditMode, setIsEditMode] = useState(false);
+    const {
+        _id: id,
+        name,
+        realtyType,
+        ownership,
+        ownershipPeriod,
+        roiSale,
+        roiRent,
+        priceMin,
+        priceMax,
+        squareMin,
+        squareMax,
+        bedrooms,
+        windowView,
+        landSquare,
+        location,
+        occupancy,
+        beachDistance,
+        livingPossibility,
+        constructionStatus,
+        description,
+        images,
+    } = realty;
 
-    const handleEdit = () => {
-        setIsEditMode((prev) => {
-            return !prev;
-        });
-    };
+    const router = useRouter();
 
     const refreshData = () => {
         router.replace(router.asPath, {}, { scroll: false });
     }
 
-    const handleDelete = async () => {
-        try {
-            const response = await fetch(`${API_URL}/realties/${id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                refreshData();
-            }
-        } catch (error) {
-            console.log('error:', error.message );
-        }
+    const handleEdit = () => {
+        onOpenRealtyForm(realty);
     };
 
-    const handleSubmit = (isEditMode) => {
-        if (!isEditMode) {
-            setIsEditMode(false);
-        }
+    const handleDelete = async () => {
+        console.log(id);
+        await RealtyService.deleteRealty(id);
+
+        refreshData();
+    };
+
+    const handleLike = (id) => {
+        console.log(id);
     }
 
     return  (
-        <div className={realtyCard.content} >
-            { isEditMode
-                ? (
-                    <RealtyForm
-                        initialRealty={{
-                            id,
-                            name,
-                            realtyType,
-                            ownership,
-                            ownershipPeriod,
-                            roiSale,
-                            roiRent,
-                            priceMin,
-                            priceMax,
-                            squareMin,
-                            squareMax,
-                            bedrooms,
-                            windowView,
-                            landSquare,
-                            location,
-                            occupancy,
-                            beachDistance,
-                            livingPossibility,
-                            constructionStatus,
-                            description,
-                            images
-                        }}
-                        isEdit={isEditMode}
-                        onSubmit={handleSubmit}
+        <div className={realtyCard.content}>
+            <div className={realtyCard.gallery}>
+                <Carousel images={images}/>
+            </div>
+
+            <div className={realtyCard.flex}>
+                <div className={realtyCard.properties}>
+                    <div className={realtyCard.title}>{name}</div>
+
+                    <RealtyProp
+                        name={'расположение'}
+                        value={location}
                     />
-                )
-                : (
-                    <div>
-                        <h3>{ name }</h3>
 
-                        <div>Цены:  от { priceMin } до { priceMax }</div>
+                    <RealtyProp
+                        name={'цена'}
+                        value={priceMin + '-' + priceMax + '$'}
+                    />
 
-                        <div>Расположение: { location }</div>
-
-                        <div>Площадь: { squareMin }</div>
-
-                        <div>Срок завершения строительства: { constructionStatus }</div>
-
-                        <div>Количество спален: { bedrooms }</div>
-
-                        { images.map(image => <img className={realtyCard.image} key={image} src={image.secure_url} />) }
+                    <div className={realtyCard.details}>
+                        <div>тип: {realtyType}</div>
+                        <div>статус строительства: {constructionStatus}</div>
+                        <div>владение: {ownership}</div>
+                        <div>{ownershipPeriod}</div>
+                        <div>ROI от продажи: {roiSale}</div>
+                        <div>ROI от аренды: {roiRent}</div>
+                        <div>площадь от {squareMin} до {squareMax}</div>
+                        <div>количество спален: {bedrooms}</div>
+                        <div>вид из окна: {windowView}</div>
+                        <div>площадь участка: {landSquare}</div>
+                        <div>заполняемость: {occupancy}</div>
+                        <div>до пляжа: {beachDistance}</div>
+                        <div>проживание: {livingPossibility}</div>
+                        <div>{description}</div>
                     </div>
-                )
-            }
 
-            <button
-                className={realtyCard.editButton}
-                onClick={handleEdit}
-            >
-                {isEditMode ? 'close editing' : 'edit'}
-            </button>
+                    <div className={realtyCard.controls}>
+                        <IconButton onClick={handleEdit}>
+                            <EditIcon />
+                        </IconButton>
 
-            <button
-                className={realtyCard.deleteButton}
-                onClick={handleDelete}
-            >
-                delete
-            </button>
+                        <IconButton onClick={handleDelete}>
+                            <DeleteIcon />
+                        </IconButton>
+
+                        <IconButton onClick={handleLike}>
+                            <HeartIcon />
+                        </IconButton>
+                    </div>
+                </div>
+            </div>
+
+            <div className={realtyCard.controls}>
+
+            </div>
         </div>
-    );
+    )
 }

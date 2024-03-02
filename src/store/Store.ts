@@ -2,14 +2,17 @@ import { makeAutoObservable } from 'mobx';
 import axios from 'axios';
 
 import { User } from '../models/User';
-import AuthService from '../services/AuthService';
+import AuthService from '../services/Auth';
 import { AuthResponse } from '../models/AuthResponse';
 import { API_URL } from '../../config';
+import { Realty } from '~/src/models/Realty';
+import { SignInParamsType } from '../types';
 
 export default class Store {
     user = {} as User;
     isAuth = false;
     isLoading = false;
+    realties = [] as Realty[];
 
     constructor() {
         makeAutoObservable(this);
@@ -27,6 +30,12 @@ export default class Store {
         this.isLoading = isLoading;
     }
 
+    setRealties(realties) {
+        this.realties = realties;
+    }
+
+    getRealties = () => this.realties;
+
     async signUp(email: string, password: string) {
         try {
             const response = await AuthService.signUp(email, password);
@@ -41,7 +50,6 @@ export default class Store {
     }
 
     async signIn(credentials: SignInParamsType) {
-        console.log('credentials', credentials);
         try {
             const response = await AuthService.signIn(credentials);
 
@@ -83,7 +91,6 @@ export default class Store {
     async checkAuth() {
         try {
             this.setIsLoading(true);
-            console.log(`${API_URL}/refresh`);
 
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
 

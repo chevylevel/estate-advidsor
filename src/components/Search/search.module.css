@@ -1,0 +1,29 @@
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputLabel {
+    color: white;
+    font-size: 12px;
+}
+
+.inputField {
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.control {
+    display: flex;
+    all: unset;
+    cursor: pointer;
+}
+
+.icon {
+    display: block;
+    width: 30px;
+    height: auto;
+    fill: #ffffff;
+}

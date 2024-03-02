@@ -1,9 +1,19 @@
 .content {
-    position: relative;
     display: flex;
     flex-direction: column;
-    padding:0 50px 50px;
-    border: solid 1px #ef9900;
+    border: 1px solid transparent;
+    overflow: hidden;
+    /* box-shadow: 0 2px 12px #edeff0; */
+}
+
+.properties {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+}
+
+.flex {
+    display: flex;
 }
 
 .editButton {
@@ -18,6 +28,40 @@
     bottom: 5px;
 }
 
-/* .image {
-    aspect-ratio: 1/1;
-} */
+.gallery {
+    width: 100%;
+}
+
+.title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    padding: 10px 0 10px 0;
+    font-weight: 600;
+    height: 4em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+}
+
+.details{
+    display: none;
+}
+
+.prop {
+    display: flex;
+    align-items: baseline;
+}
+
+.propName {
+    color: #5D5D64;
+    font-size: small;
+}
+
+.propValue {
+    /* color: '#5D5D64', */
+    font-size: large;
+}
+
+.controls {
+    display: flex;
+}

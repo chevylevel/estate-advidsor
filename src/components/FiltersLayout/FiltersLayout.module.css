@@ -1,0 +1,24 @@
+.content {
+    position: sticky;
+    grid-column: 1 / last-line;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    background-color: rgb(255, 255, 255);
+}
+
+.open {
+    position: sticky;
+    top: 0;
+}
+
+.showControl {
+    position: absolute;
+    display: flex;
+    align-self: center;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+}
+

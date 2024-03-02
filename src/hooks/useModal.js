@@ -3,17 +3,17 @@ import { useState } from 'react';
 export const useModal = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClickOpenModal = () => {
+    const openModal = () => {
         setIsOpen(true);
     }
 
-    const handleClickCloseModal = () => {
+    const closeModal = () => {
         setIsOpen(false);
     }
 
     return {
         isOpen,
-        handleClickOpenModal,
-        handleClickCloseModal,
+        openModal,
+        closeModal,
     }
 }

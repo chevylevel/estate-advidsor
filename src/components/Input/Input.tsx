@@ -1,34 +1,43 @@
-import type  { ChangeEvent, FC, HTMLInputTypeAttribute } from 'react';
+import  { useState, type FC, type InputHTMLAttributes, type ReactNode, useCallback, forwardRef, Ref } from 'react';
 
 import input from './Input.module.css';
 
-interface InputPropsType {
-    labelText?: string;
-    placeholderText?: string;
-    type: HTMLInputTypeAttribute
-    value?: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void
+interface InputPropsType extends InputHTMLAttributes<HTMLInputElement> {
+    className?: string,
+    label?: string,
+    initialValue?: string | number,
+    onChange?: (value) => void,
 }
 
-export const Input: FC<InputPropsType> = ({
-    labelText,
-    placeholderText,
-    type,
-    value,
-    onChange,
-}) => (
-    <div className={input.content}>
-        <label className={input.label}>
-            {labelText}
-        </label>
+export const Input = forwardRef <HTMLInputElement, InputPropsType>(({
+    className = '',
+    label = '',
+    initialValue = '',
+    onChange = (e) => {},
+    ...otherProps
+}, ref) => {
+    const [value, setValue] = useState(initialValue);
 
-        <input
-            className={input.inputField}
-            placeholder={placeholderText}
-            type={type}
-            value={value}
-            onChange={onChange}
-        />
-    </div>
-);
+    const handleChange = (e) => {
+        setValue(e.currentTarget.value);
+        onChange(e.currentTarget.value);
+    }
 
+    return (
+        <div className={className + input.content}>
+            {label && (
+                <div className={input.label}>
+                    <label>{label}</label>
+                </div>
+            )}
+
+            <input
+                ref={ref}
+                className={input.inputField}
+                value={value}
+                onChange={handleChange}
+                {...otherProps}
+            />
+        </div>
+    );
+});

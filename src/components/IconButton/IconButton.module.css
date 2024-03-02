@@ -1,0 +1,32 @@
+.content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    background: none;
+    border: unset;
+    cursor: pointer;
+    padding: unset;
+    margin: 5px;
+}
+
+.substrate {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.substrate:hover {
+    opacity: 0.3;
+    transform: scale(1.5);
+    transition: transform 0.2s ease;
+}
+
+.dark {
+    background-color: #aaaaaa;
+}
+
+.light {
+    background-color: #ffffff;
+}

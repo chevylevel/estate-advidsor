@@ -6,10 +6,16 @@ import realtyForm from './realtyForm.module.css';
 const Form = ({
     name,
     children,
+    onSubmit,
 }) => {
 
+
+    const handleSubmit = () => {
+        onSubmit();
+    }
+
     return (
-        <form name={name} >
+        <form name={name} onSubmit={handleSubmit}>
             {children}
         </form>
     );

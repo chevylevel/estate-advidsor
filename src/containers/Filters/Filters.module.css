@@ -1,0 +1,12 @@
+.content {
+    display: flex;
+}
+
+.block {
+    margin: 20px;
+}
+
+.ranges {
+    display: flex;
+    flex-direction: column;
+}

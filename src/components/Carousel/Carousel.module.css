@@ -1,0 +1,76 @@
+.content {
+    position: relative;
+    display: flex;
+}
+
+.image {
+    width: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    object-fit: cover;
+}
+
+.pagination {
+    position: absolute;
+    bottom: 10px;
+    left:50%;
+    transform: translateX(-50%);
+}
+
+.slides {
+    display: flex;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-color: transparent;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    border-radius: 10px;
+}
+
+.slides::-webkit-scrollbar {
+    display: none;
+}
+
+.prevButton, .nextButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    appearance: none;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    background: rgb(255, 255, 255);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.prevButton {
+    left: 4%;
+}
+
+.nextButton {
+    right: 4%;
+}
+
+.prevButton:hover, .nextButton:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.2);
+}
+
+.blankImage {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #bbbaba;
+    border-radius: 10px;
+}
