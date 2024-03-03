@@ -6,9 +6,13 @@ import {
     useRef,
 } from 'react';
 
-import filtersLayoutStyles from './FiltersLayout.module.css';
 import { useInView } from 'react-intersection-observer';
 import classNames from 'classnames';
+
+import UpIcon from '~/public/images/up.svg';
+import DownIcon from '~/public/images/down.svg';
+
+import filtersLayoutStyles from './FiltersLayout.module.css';
 
 type FilterPropsType = {
     children: ReactNode;
@@ -49,8 +53,8 @@ const FiltersLayout: FC<FilterPropsType> = ({
                 className={classNames(filtersLayoutStyles.content, {
                     [filtersLayoutStyles.open]: isOpenFilters,
                 })}
-                // ref={ref}
-                // style={{ top: `-${ref.current?.clientHeight}px`}}
+                ref={ref}
+                style={{ top: isOpenFilters ? 0 : `-${ref.current?.clientHeight + 1 }px`}}
             >
 
                 {children}
@@ -60,6 +64,7 @@ const FiltersLayout: FC<FilterPropsType> = ({
                         [filtersLayoutStyles.showControlOpen] : isOpenFilters
                     })}>
                         <button
+                            className={filtersLayoutStyles.button}
                             onClick={() => {
                                 setOpenFilters((prev)=> !prev);
                                 if (inViewBottom) {
@@ -67,7 +72,9 @@ const FiltersLayout: FC<FilterPropsType> = ({
                                 }
                             }}
                         >
-                            фильтры, {isOpenFilters? 1 : 0}
+                            <div className={filtersLayoutStyles.buttonContent}>
+                                filters {isOpenFilters ? <UpIcon/> : <DownIcon/>}
+                            </div>
                         </button>
                     </div>
                 )}

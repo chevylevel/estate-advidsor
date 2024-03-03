@@ -5,6 +5,7 @@
     flex-direction: column;
     z-index: 1;
     background-color: rgb(255, 255, 255);
+    transition: top .3s;
 }
 
 .open {
@@ -15,6 +16,7 @@
 .showControl {
     position: absolute;
     display: flex;
+    justify-content: center;
     align-self: center;
     top: 100%;
     left: 50%;
@@ -22,3 +24,14 @@
     width: 100px;
 }
 
+.buttonContent {
+    display: flex;
+    align-items: center;
+}
+
+.button {
+    height: 30px;
+    background-color: #e3e3e3;
+    border: none;
+    border-radius: 0 0 10px 10px;
+}
