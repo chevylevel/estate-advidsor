@@ -27,7 +27,7 @@ const Limit: FC<CheckboxPropsType> = ({
     const minYear = now.getFullYear();
     const month = now.getMonth() + 1;
     const currentQuarter = Math.ceil(month / 3);
-    const min = minYear + currentQuarter * step;
+    const min = minYear + (currentQuarter * step - step);
 
     const { store } = useContext(Context);
 
@@ -38,7 +38,7 @@ const Limit: FC<CheckboxPropsType> = ({
         }) => constructionDeadlineYear + constructionDeadlineQuarter * 0.25)
         .sort((a, b) => a - b)[0];
 
-    const [value, setValue] = useState(min);
+    const [value, setValue] = useState(max);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = parseFloat(e.currentTarget.value)
