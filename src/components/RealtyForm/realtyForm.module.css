@@ -7,6 +7,10 @@
     padding: 0 50px 50px;
 }
 
+.form {
+
+}
+
 .label {
     position: absolute;
     top: -15px;
@@ -31,13 +35,14 @@
 }
 
 .images {
-
+    display: flex;
 }
 
 .imageContainer {
     position: relative;
+    max-width: 100%;
 }
 
 .image {
-    max-width: 100%;
+    max-width: 200px;
 }

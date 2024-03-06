@@ -7,12 +7,14 @@ import { AuthResponse } from '../models/AuthResponse';
 import { API_URL } from '../../config';
 import { Realty } from '~/src/models/Realty';
 import { SignInParamsType } from '../types';
+import { Location } from '../models/Location';
 
 export default class Store {
     user = {} as User;
     isAuth = false;
     isLoading = false;
     realties = [] as Realty[];
+    locations = [] as Location[];
 
     constructor() {
         makeAutoObservable(this);
@@ -32,6 +34,10 @@ export default class Store {
 
     setRealties(realties) {
         this.realties = realties;
+    }
+
+    setLocations(locations) {
+        this.locations = locations;
     }
 
     getRealties = () => this.realties;

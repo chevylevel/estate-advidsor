@@ -11,17 +11,17 @@ import { Context } from '~/src/AppWrapper';
 interface RangeFilterPropsType {
     step: number,
     label: string,
-    name: string,
     minKey: NumberRealtyField;
     maxKey: NumberRealtyField;
     unit: string,
+    filterName: string,
     onSetFilter: (range) => void;
 }
 
 const RangeFilter: FC<RangeFilterPropsType> = ({
     step,
     label,
-    name,
+    filterName,
     minKey,
     maxKey,
     unit,
@@ -38,7 +38,7 @@ const RangeFilter: FC<RangeFilterPropsType> = ({
     }
 
     useEffect(() => {
-        onSetFilter({ [name]: range });
+        onSetFilter({ [filterName]: range });
     }, [debouncedRange]);
 
     return (

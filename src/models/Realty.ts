@@ -1,6 +1,6 @@
 export interface RealtyData {
     name: string;
-    realtyType: string;
+    type: string;
     ownership: string;
     ownershipPeriod: string;
     squareMin: number;
@@ -14,11 +14,13 @@ export interface RealtyData {
     landSquareMax: number;
     location: string;
     occupancy: number;
-    beachDistance: number;
-    livingPossibility: string;
-    constructionStatus: string;
-    windowView: string;
+    isPossibleToStay: boolean;
+    constructionDeadlineYear: number,
+    constructionDeadlineQuarter: number,
+    withView: boolean;
+    withInstallment: boolean;
     description: string;
+    tags:string[],
     images: {
         id: string,
         url: string,

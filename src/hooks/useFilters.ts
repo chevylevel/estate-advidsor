@@ -4,9 +4,16 @@ import { Realty } from '../models/Realty'
 
 type FiltersType = {
     price: [min?: number, max?: number],
+    withInstallment: boolean,
     livingSpace: [min?: number, max?: number],
-    locations: string[],
     landSquare: [min?: number, max?: number],
+    ownership: string[],
+    location: string[],
+    type: string[],
+    withView: boolean,
+    isPossibleToStay: boolean,
+    bedrooms: string[],
+    constructionDeadline: [year?: number, quarter?: number],
 }
 
 export const useFilters = (
@@ -15,26 +22,84 @@ export const useFilters = (
     const [filters, setFilters] = useState<FiltersType>({
         price: [],
         livingSpace: [],
-        locations: [],
         landSquare: [],
-    })
+        ownership: [],
+        location: [],
+        type: [],
+        bedrooms: [],
+        constructionDeadline: [],
+        withInstallment: null,
+        withView: null,
+        isPossibleToStay: null,
+    });
 
     const filteredRealties = useMemo(
         () => realties.filter((realty) => {
             const [minPrice, maxPrice] = filters.price;
             const [minLivingSpace, maxLivingSpace] = filters.livingSpace;
+            const [minLandSquare, maxLandSquare] = filters.landSquare;
 
             return (
-                (realty.priceMin >= minPrice
-                && realty.priceMax <= maxPrice)
+                (
+                    realty.priceMin ? realty.priceMin >= minPrice : true
+                        && realty.priceMax ? realty.priceMax <= maxPrice : true
+                )
 
-                && (realty.squareMin >= minLivingSpace
-                && realty.squareMax <= maxLivingSpace)
+                && (
+                    realty.landSquareMin ? realty.squareMin >= minLivingSpace : true
+                        && realty.squareMax ? realty.squareMax <= maxLivingSpace : true
+                )
 
-                && (filters.locations.length
-                    ? filters.locations.includes(realty.location)
-                    : true)
-            );
+                && (
+                    realty.landSquareMin ? realty.landSquareMin >= minLandSquare : true
+                        && realty.landSquareMax ? realty.landSquareMax <= maxLandSquare : true
+                )
+
+                && (
+                    filters.location.length
+                        ? filters.location.includes(realty.location)
+                        : true
+                )
+
+                && (filters.withInstallment ? realty.withInstallment : true)
+
+                && (filters.withView ? realty.withView : true)
+
+                && (filters.isPossibleToStay ? realty.isPossibleToStay : true)
+
+                && (
+                    !!filters.ownership.length
+                        ? filters.ownership.includes('freehold') && realty.ownership === 'freehold'
+                            || filters.ownership.includes('leasehold') && realty.ownership === 'leasehold'
+                        : true
+                )
+
+                && (
+                    !!filters.type.length
+                        ? filters.type.includes('villa') && realty.type === 'villa'
+                            || filters.type.includes('apartment') && realty.type === 'apartment'
+                            || filters.type.includes('penthouse') && realty.type === 'penthouse'
+                        : true
+                )
+
+                && (
+                    !!filters.bedrooms.length
+                        ? filters.bedrooms.includes('1') && realty.bedrooms === 1
+                            || filters.bedrooms.includes('2') && realty.bedrooms === 2
+                            || filters.bedrooms.includes('3') && realty.bedrooms === 3
+                            || filters.bedrooms.includes('4') && realty.bedrooms === 4
+                            || filters.bedrooms.includes('5+') && realty.bedrooms >= 5
+                        : true
+                )
+
+                && (
+                    !!filters.constructionDeadline.length && !!realty.constructionDeadlineYear
+                        ?  realty.constructionDeadlineYear <= filters.constructionDeadline[0]
+                            && realty.constructionDeadlineQuarter <= filters.constructionDeadline[1]
+                        : true
+                )
+
+                );
         }),
         [filters, realties],
     );
@@ -42,8 +107,6 @@ export const useFilters = (
     const mergeFilters = (filter) => {
         setFilters(prev => ({...prev, ...filter}))
     };
-
-    console.log(filters);
 
     return {
         filteredRealties,

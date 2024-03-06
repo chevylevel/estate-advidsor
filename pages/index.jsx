@@ -22,7 +22,9 @@ function MainPage({
     locations = [],
 }) {
     const { store } = useContext(Context);
+
     store.setRealties(realties);
+    store.setLocations(locations);
 
     const {
         openModal: openWatsappForm,

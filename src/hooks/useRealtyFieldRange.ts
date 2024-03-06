@@ -16,7 +16,7 @@ const useRealtyFieldRange = (
 
         return range;
     },
-    [realties[0][minKey] ?? 0, 0],
+    [realties[0] ? realties[0][minKey] : 0, 0],
 );
 
 export default useRealtyFieldRange;

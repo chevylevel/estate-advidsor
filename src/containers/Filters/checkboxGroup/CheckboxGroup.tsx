@@ -5,20 +5,22 @@ import {
     useState,
 } from 'react';
 
-import locationFilterStyles from './LocationFilter.module.css';
+import checkboxGroupStyles from './CheckboxGroup.module.css';
 
-interface OptionFilterPropsType {
+interface CheckboxGroupPropsType {
     onSetFilter: (filter) => void,
-    options: [{
+    options: {
         _id: string,
         name: string,
-    }],
+    }[],
+    label: string;
     filterName: string,
 }
 
-const OptionFilter: FC<OptionFilterPropsType> = ({
+const CheckboxGroup: FC<CheckboxGroupPropsType> = ({
     onSetFilter,
     options,
+    label,
     filterName,
 }) => {
     const [checkedOptions, setCheckedOptions] = useState([])
@@ -35,14 +37,14 @@ const OptionFilter: FC<OptionFilterPropsType> = ({
 
     useEffect(
         () => {
-            onSetFilter({ filterName: checkedOptions });
+            onSetFilter({ [filterName]: checkedOptions });
         },
         [checkedOptions],
     );
 
     return (
-        <div className={locationFilterStyles.content}>
-            <div>{filterName}</div>
+        <div className={checkboxGroupStyles.content}>
+            <label>{label}</label>
 
             {options.map(({ _id, name }) => (
                 <div
@@ -51,8 +53,8 @@ const OptionFilter: FC<OptionFilterPropsType> = ({
                 >
                     <input
                         type={'checkbox'}
-                        value={name}
                         onChange={handleCheckOption}
+                        value={name}
                     />
 
                     {name}
@@ -62,4 +64,4 @@ const OptionFilter: FC<OptionFilterPropsType> = ({
     );
 }
 
-export default OptionFilter;
+export default CheckboxGroup;

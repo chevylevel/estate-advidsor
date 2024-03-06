@@ -8,6 +8,11 @@ import CloudinaryService from '../../services/Cloudinary';
 import RealtyService from '../../services/Realty';
 import { Realty } from '~/src/models/Realty';
 import { Location } from '~/src/models/Location';
+import ConstructionDeadlineField from './fields/ConstructionDeadlineField';
+import LocationField from './fields/LocationFiled';
+import OwnershipField from './fields/OwnershipField';
+import TypeField from './fields/TypeField';
+import Checkbox from '../Checkbox/Checkbox';
 
 interface RealtyFormPropsType {
     initialRealty: Realty;
@@ -17,16 +22,12 @@ interface RealtyFormPropsType {
 
 const RealtyForm: FC<RealtyFormPropsType> = ({
     initialRealty,
-    locations = [],
     onSubmit,
 }) => {
     const router = useRouter();
     const ref = useRef<HTMLDivElement>();
 
     useClickOutside(ref, onSubmit);
-
-    const [isFreehold, setIsFreehold] = useState(true);
-    const [location, setLocation] = useState(initialRealty?.location);
 
     const refreshData = () => {
         router.replace(router.asPath, {}, { scroll: false });
@@ -51,10 +52,6 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
         }
     }
 
-    const handleSelectOwnership = (e) => {
-        setIsFreehold(e.target.value === 'freehold');
-    }
-
     const handleRemoveImage = async (image) => {
         try {
             const response = await fetch(
@@ -71,10 +68,6 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
             console.error('error:', error.message );
         }
     };
-
-    const handleChangeLocation = (e) => {
-        setLocation(e.currentTarget.value);
-    }
 
     const uploadImages = async (images) => {
         if (!images.length) {
@@ -104,71 +97,33 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
             <h4>
                 Добаить лот
             </h4>
-            <form id={'realty'}>
+
+            <form id={'realty'} className={realtyForm.form}>
                 <Input
                     label={'Название'}
                     name={'name'}
-                    initialValue={initialRealty?.name}
+                    initialValue={initialRealty?.name || ''}
                     required
                 />
 
-                <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column' }}>
-                    <label
-                        htmlFor='realty-type-select'
-                        style={{ marginRight: '10px', fontSize: 'small' }}
-                    >
-                        Тип недвижимости
-                    </label>
+                <TypeField initialRealty={initialRealty} />
 
-                    <select id='realty-type-select' name={'realtyType'} style={{ padding: '5px'}}>
-                        <option value="apartment">apartment</option>
-                        <option value="penthouse">penthouse</option>
-                        <option value="villa">villa</option>
-                    </select>
-                </div>
-
-                <div style={{ display: 'flex', marginTop: '20px', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label
-                            htmlFor='ownership'
-                            style={{ marginRight: '10px', fontSize: 'small' }}
-                        >
-                            Тип  владения
-                        </label>
-
-                        <select
-                            id='ownership-select'
-                            name={'ownership'}
-                            style={{ padding: '5px'}}
-                            onChange={handleSelectOwnership}
-                        >
-                            <option value='freehold'>freehold</option>
-                            <option value='leasehold'>leasehold</option>
-                        </select>
-                    </div>
-                    <div style={{ marginTop: '10px' }}>
-                        <Input
-                            label={'Срок'}
-                            name={'ownershipPeriod'}
-                            {...(isFreehold ?  { disabled: true, value: '' } : {})}
-                        />
-                    </div>
-                </div>
+                <OwnershipField initialRealty={initialRealty} />
 
                 <div style={{ marginTop: '10px', fontSize: 'small' }}>
                     Жилая площадь
 
                     <div style={{ marginTop: '10px', display: 'flex', justifyContent:'space-between' }}>
                         <Input
-                            initialValue={initialRealty?.squareMin}
                             label={'от'}
                             name={'squareMin'}
+                            initialValue={initialRealty?.squareMin || ''}
                         />
 
                         <Input
                             label={'до'}
                             name={'squareMax'}
-                            initialValue={initialRealty?.squareMax}
+                            initialValue={initialRealty?.squareMax || ''}
                         />
                     </div>
                 </div>
@@ -180,16 +135,23 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                         <Input
                             label={'от'}
                             name={'priceMin'}
-                            initialValue={initialRealty?.priceMin}
+                            initialValue={initialRealty?.priceMin || ''}
                         />
 
                         <Input
                             label={'до'}
                             name={'priceMax'}
-                            initialValue={initialRealty?.priceMax}
+                            initialValue={initialRealty?.priceMax || ''}
                         />
                     </div>
                 </div>
+
+
+                <Checkbox
+                    label={'With installment'}
+                    name={'withInstallment'}
+                    initialValue={initialRealty?.withInstallment}
+                />
 
                 <div style={{ marginTop: '10px', fontSize: 'small' }}>
                     ROI
@@ -198,13 +160,13 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                         <Input
                             label={'ROI Sale'}
                             name={'roiSale'}
-                            initialValue={initialRealty?.roiSale}
+                            initialValue={initialRealty?.roiSale || ''}
                         />
 
                         <Input
                             label={'ROI Rent'}
                             name={'roiRent'}
-                            initialValue={initialRealty?.roiRent}
+                            initialValue={initialRealty?.roiRent || ''}
                         />
                     </div>
                 </div>
@@ -213,17 +175,15 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                     <Input
                         label={'Количество спален'}
                         name={'bedrooms'}
-                        initialValue={initialRealty?.bedrooms}
+                        initialValue={initialRealty?.bedrooms || ''}
                     />
                 </div>
 
-                <div style={{ marginTop: '40px' }}>
-                    <Input
-                        label={'Вид из окна'}
-                        name={'windowView'}
-                        initialValue={initialRealty?.windowView}
-                    />
-                </div>
+                <Checkbox
+                    label={'With view'}
+                    name={'withView'}
+                    initialValue={initialRealty?.withView}
+                />
 
                 <div style={{ marginTop: '40px' }}>
                     Площадь участка
@@ -243,68 +203,29 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                     </div>
                 </div>
 
-                <div style={{ marginTop: '40px' }}>
-                    <label
-                        htmlFor='location'
-                        style={{ marginRight: '10px', fontSize: 'small' }}
-                    >
-                        Расположение
-                    </label>
-
-                    <select
-                        id='location-select'
-                        name={'location'}
-                        style={{ padding: '5px'}}
-                        value={location}
-                        onChange={handleChangeLocation}
-                    >
-                        {locations.map(location => (
-                            <option
-                                key={location._id}
-                                value={location.name}
-                            >
-                                {location.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <LocationField initialRealty={initialRealty} />
 
                 <div style={{ marginTop: '40px' }}>
                     <Input
                         label={'Заполняемость'}
                         name={'occupancy'}
-                        initialValue={initialRealty?.occupancy}
+                        initialValue={initialRealty?.occupancy || ''}
                     />
                 </div>
 
-                <div style={{ marginTop: '40px' }}>
-                    <Input
-                        label={'Расстояние до пляжа'}
-                        name={'beachDistance'}
-                        initialValue={initialRealty?.beachDistance}
-                    />
-                </div>
+                <Checkbox
+                    label={'Possible to stay'}
+                    name={'isPossibleToStay'}
+                    initialValue={initialRealty?.isPossibleToStay}
+                />
+
+               <ConstructionDeadlineField initialRealty={initialRealty}/>
 
                 <div style={{ marginTop: '40px' }}>
                     <Input
-                        label={'Возможность проживания'}
-                        name={'livingPossibility'}
-                        initialValue={initialRealty?.livingPossibility}
-                    />
-                </div>
-
-                <div style={{ marginTop: '40px' }}>
-                    <Input
-                        label={'Стадия строительства'}
-                        name={'constructionStatus'}
-                        initialValue={initialRealty?.constructionStatus}
-                    />
-                </div>
-
-                <div style={{ marginTop: '40px' }}>
-                    <Input
-                        label={'Описание'} name={'description'}
-                        initialValue={initialRealty?.description}
+                        label={'Описание'}
+                        name={'description'}
+                        initialValue={initialRealty?.description || ''}
                     />
                 </div>
 
