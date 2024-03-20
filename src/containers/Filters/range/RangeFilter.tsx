@@ -26,11 +26,8 @@ const RangeFilter: FC<RangeFilterPropsType> = ({
     minKey,
     maxKey,
     unit,
-    realties,
     onSetFilter,
 }) => {
-    console.log('======================!!', realties);
-
     const [min, max] = useRealtyFieldRange(minKey, maxKey);
     const [range, setRange] = useState([min, max]);
     const debouncedRange = useDebounce(range, { wait: 500 });

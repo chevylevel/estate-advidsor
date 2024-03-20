@@ -65,7 +65,6 @@ const RealtyCard = ({
     };
 
     const handleDelete = async () => {
-        console.log(id);
         await RealtyService.deleteRealty(id);
 
         refreshData();

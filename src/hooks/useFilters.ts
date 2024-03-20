@@ -19,7 +19,6 @@ type FiltersType = {
 export const useFilters = (
     realties: Realty[],
 ) => {
-    console.log('filter', realties);
     const [filters, setFilters] = useState<FiltersType>({
         price: [],
         livingSpace: [],
@@ -120,8 +119,6 @@ export const useFilters = (
     const mergeFilters = useCallback((filter) => {
         setFilters(prev => ({...prev, ...filter}))
     }, [setFilters]);
-
-    console.log('filteredRealties', filteredRealties);
 
     return {
         filteredRealties,

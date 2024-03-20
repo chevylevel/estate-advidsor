@@ -17,9 +17,6 @@ import { API_URL } from '~/config';
 
 const MainPage: NextPage = () => {
     const { store } = useContext(Context);
-    const realties = [...store.realties];
-
-    console.log(realties);
 
     const {
         openModal: openWatsappForm,
@@ -30,7 +27,7 @@ const MainPage: NextPage = () => {
     const {
         filteredRealties = [],
         setFilters,
-    } = useFilters(realties);
+    } = useFilters([...store.realties]);
 
     return (
         <Page>

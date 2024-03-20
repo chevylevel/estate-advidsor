@@ -170,8 +170,6 @@ export default class Store {
     getFavorites() {
         if (!this.isLoading && this.isAuth) {
             const realties = this.realties.filter((realty) => this.user?.favorites?.includes(realty._id));
-            console.log('realties', this.realties);
-            console.log('favs', this.user.favorites);
 
             return realties;
         }
