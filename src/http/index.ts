@@ -8,22 +8,26 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+    console.log('config________', config);
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
 
+
+
     return config;
-})
+});
 
 api.interceptors.response.use(
     (config) => config,
     async (error) => {
         const originalRequest = error.config;
 
-        console.error('error 1', error);
+        console.log('retry', originalRequest);
 
         if (error?.response?.status == 401 && error.config && !error.config._isRetry) {
             originalRequest._isRetry = true;
 
             try {
+                console.log('refresh____', originalRequest);
                 const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
 
                 localStorage.setItem('token', response?.data?.accessToken);

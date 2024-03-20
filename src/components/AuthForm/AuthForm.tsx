@@ -1,44 +1,71 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import {
+    ChangeEvent,
+    MouseEvent,
+    useContext,
+    useEffect,
+    useRef,
+    useState
+} from 'react';
 
 import authForm from './AuthForm.module.css';
 import { Input } from '../Input/Input';
 import useClickOutside from '../../hooks/useClickOutside';
-import { Context } from '../../AppWrapper';
+import { observer } from 'mobx-react-lite';
+import { Context } from '~/src/app/Context';
 
-export const AuthForm = ({ onClose }) => {
-    const ref = useRef();
-    const googleAuthRef = useRef();
-
+const AuthForm = ({ onClose }) => {
     const { store } = useContext(Context);
+
+    const ref = useRef<HTMLFormElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const pwdRef = useRef<HTMLInputElement>(null);
+    const googleAuthRef = useRef<HTMLDivElement>(null);
 
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
-
-    const googleAuthParentElement = googleAuthRef.current;
 
     useClickOutside(ref, onClose);
 
     useEffect(
         () => {
-            if (!googleAuthParentElement) {
+            if (!googleAuthRef.current) {
                 return;
             }
 
             google.accounts.id.renderButton(
-                googleAuthParentElement,
+                googleAuthRef.current,
                 {
                     type: 'standard',
                     shape: 'pill',
+
                 },
             );
         },
-        [googleAuthParentElement],
+        [googleAuthRef.current],
     );
 
+    const handleSignIn = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        store.signIn({
+            email: email || emailRef?.current?.value || '',
+            password: password || pwdRef?.current?.value || '',
+        });
+    };
+
+    const handleSignUp = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        store.signUp(
+            email || emailRef?.current?.value || '',
+            password || pwdRef?.current?.value || '',
+        );
+    };
+
     return (
-        <div
+        <form
             ref={ref}
-            className={authForm.AuthForm}
+            className={authForm.content}
         >
             <div>
                 Личный кабинет
@@ -46,32 +73,44 @@ export const AuthForm = ({ onClose }) => {
 
             <div style={{ margin: '40px 0 20px' }}>
                 <Input
+                    ref={emailRef}
                     label={'email'}
                     type={'text'}
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget?.value)}
                 />
             </div>
 
             <div style={{ margin: '0 0 40px' }}>
                 <Input
+                    ref={pwdRef}
                     label={'Пароль'}
                     type={'password'}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.currentTarget?.value)}
                 />
             </div>
 
-            <div>
-                <button onClick={() => store.signUp(email, password)}>Зарегистрироваться</button>
+            <div className={authForm.btn}>
+                <button
+                    onClick={handleSignUp}
+                >
+                    Зарегистрироваться
+                </button>
                 {' '}
-                <button onClick={() => store.signIn({ email, password })}>Войти</button>
+                <button
+                    onClick={handleSignIn}
+                >
+                    Войти
+                </button>
 
                 <div
                     ref={googleAuthRef}
-                    style={{ marginTop: '10px' }}
+                    className={authForm.gsiButton}
                 ></div>
             </div>
-        </div>
+        </form>
     );
 }
+
+export default observer(AuthForm);

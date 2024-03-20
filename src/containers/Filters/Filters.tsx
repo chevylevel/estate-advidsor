@@ -5,10 +5,11 @@ import {
 import filtersStyles from './Filters.module.css';
 import RangeFilter from './range/RangeFilter';
 import CheckboxGroup from './checkboxGroup/CheckboxGroup';
-import { Context } from '../../AppWrapper';
 import Checkbox from './checkbox/Checkbox';
 import filters from './filtersData';
 import Limit from './limit/Limit';
+import { observer } from 'mobx-react-lite';
+import { Context } from '~/src/app/Context';
 
 type FilterPropsType = {
     onSetFilters: (filter) => void;
@@ -34,6 +35,7 @@ const Filters: FC<FilterPropsType> = ({
                         filterName={'price'}
                         minKey={'priceMin'}
                         maxKey={'priceMax'}
+                        realties={[...store.realties]}
                         onSetFilter={onSetFilters}
                     />
 
@@ -53,6 +55,7 @@ const Filters: FC<FilterPropsType> = ({
                     filterName={'livingSpace'}
                     minKey={'squareMin'}
                     maxKey={'squareMax'}
+                    realties={store.realties}
                     onSetFilter={onSetFilters}
                 />
 
@@ -63,6 +66,7 @@ const Filters: FC<FilterPropsType> = ({
                     filterName={'landSquare'}
                     minKey={'landSquareMin'}
                     maxKey={'landSquareMax'}
+                    realties={store.realties}
                     onSetFilter={onSetFilters}
                 />
             </div>
@@ -119,6 +123,7 @@ const Filters: FC<FilterPropsType> = ({
 
             <div className={filtersStyles.block}>
                 <Limit
+                    realties={store.realties}
                     label={'Construction deadline'}
                     filterName={'constructionDeadline'}
                     onSetFilter={onSetFilters}
@@ -128,4 +133,4 @@ const Filters: FC<FilterPropsType> = ({
     );
 }
 
-export default Filters;
+export default observer(Filters);

@@ -14,6 +14,7 @@
 
 .flex {
     display: flex;
+    width: 100%;
 }
 
 .editButton {
@@ -53,8 +54,8 @@
 }
 
 .propName {
-    color: #5D5D64;
     font-size: small;
+    color: #5D5D64;
 }
 
 .propValue {
@@ -62,6 +63,20 @@
     font-size: large;
 }
 
+.controlsLeft {
+    display: flex;
+    width: 100%;
+}
+
+.controlsLeft > *:not(:last-of-type) {
+    display: flex;
+    margin-right: 10px;
+}
+
 .controls {
     display: flex;
+    width: 100%;
+    padding: 10px
 }
+
+/* .controls > *:not(:last-child) {margin-right: 15px;} */

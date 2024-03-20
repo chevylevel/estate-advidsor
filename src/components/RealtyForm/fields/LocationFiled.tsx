@@ -1,7 +1,8 @@
 import { ChangeEvent, FC, useContext, useState } from 'react';
 import { Input } from '../../Input/Input';
 import { Realty } from '~/src/models/Realty';
-import { Context } from '~/src/AppWrapper';
+import { observer } from 'mobx-react-lite';
+import { Context } from '~/src/app/Context';
 
 interface LocationFieldPropsType {
     initialRealty: Realty;
@@ -10,7 +11,7 @@ interface LocationFieldPropsType {
 const LocationField:FC<LocationFieldPropsType> = ({
     initialRealty,
 }) => {
-    const { store } = useContext(Context)
+    const { store } = useContext(Context);
 
     const [location, setLocation] = useState(initialRealty?.location);
 
@@ -47,4 +48,4 @@ const LocationField:FC<LocationFieldPropsType> = ({
     );
 }
 
-export default LocationField;
+export default observer(LocationField);

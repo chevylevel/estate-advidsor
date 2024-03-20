@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useContext, useRef, useState } from 'react';
 import { Input } from '../Input/Input';
 import { useRouter } from 'next/router';
 import realtyForm from './realtyForm.module.css';
@@ -7,7 +7,6 @@ import { API_URL } from '../../../config';
 import CloudinaryService from '../../services/Cloudinary';
 import RealtyService from '../../services/Realty';
 import { Realty } from '~/src/models/Realty';
-import { Location } from '~/src/models/Location';
 import ConstructionDeadlineField from './fields/ConstructionDeadlineField';
 import LocationField from './fields/LocationFiled';
 import OwnershipField from './fields/OwnershipField';
@@ -16,7 +15,6 @@ import Checkbox from '../Checkbox/Checkbox';
 
 interface RealtyFormPropsType {
     initialRealty: Realty;
-    locations: Location[];
     onSubmit: () => void;
 }
 
@@ -25,7 +23,9 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
     onSubmit,
 }) => {
     const router = useRouter();
-    const ref = useRef<HTMLDivElement>();
+    const ref = useRef<HTMLDivElement>(null);
+
+    const [images, setImages] = useState(initialRealty?.images || []);
 
     useClickOutside(ref, onSubmit);
 
@@ -37,7 +37,7 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
         e.preventDefault();
         const formData = new FormData(e.target.form);
         const uploadedImages = await uploadImages(e.target.form.images.files);
-        formData.set('images', uploadedImages);
+        formData.set('images', uploadedImages ?? '');
 
         const response = initialRealty
             ? await RealtyService.updateRealty(
@@ -61,9 +61,9 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                 }
             );
 
-            if (response.ok) {
-                refreshData();
-            }
+            setImages(prev => prev.filter(prevImage => prevImage.id !== image.id));
+
+            if (response.ok) {}
         } catch (error) {
             console.error('error:', error.message );
         }
@@ -87,7 +87,7 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
             id: public_id,
             url: secure_url,
         })));
-    }
+    };
 
     return (
         <div
@@ -150,7 +150,7 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                 <Checkbox
                     label={'With installment'}
                     name={'withInstallment'}
-                    initialValue={initialRealty?.withInstallment}
+                    initialValue={initialRealty?.withInstallment || false}
                 />
 
                 <div style={{ marginTop: '10px', fontSize: 'small' }}>
@@ -182,7 +182,7 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                 <Checkbox
                     label={'With view'}
                     name={'withView'}
-                    initialValue={initialRealty?.withView}
+                    initialValue={initialRealty?.withView || false}
                 />
 
                 <div style={{ marginTop: '40px' }}>
@@ -216,7 +216,7 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                 <Checkbox
                     label={'Possible to stay'}
                     name={'isPossibleToStay'}
-                    initialValue={initialRealty?.isPossibleToStay}
+                    initialValue={initialRealty?.isPossibleToStay || false}
                 />
 
                <ConstructionDeadlineField initialRealty={initialRealty}/>
@@ -239,9 +239,9 @@ const RealtyForm: FC<RealtyFormPropsType> = ({
                 </div>
             </form>
 
-            {initialRealty && (
+            {images.length > 0 && (
                 <div className={realtyForm.images}>
-                    {initialRealty.images.map(image =>
+                    {images.map(image =>
                         <div
                             key={image.id}
                             className={realtyForm.imageContainer}

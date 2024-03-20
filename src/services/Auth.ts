@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import api from '../http';
 import { AuthResponse } from '../models/AuthResponse';
+import { SignInParamsType } from '../types';
 
 export default class AuthService {
     static async signUp(

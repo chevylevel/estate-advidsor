@@ -1,12 +1,12 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { useDebounce } from 'ahooks';
 
 import InputRange from '~/src/components/InputRange/InputRange';
 
 import rangeFilterStyles from './RangeFilter.module.css';
 import useRealtyFieldRange from '~/src/hooks/useRealtyFieldRange';
 import { NumberRealtyField } from '~/src/types';
-import { useDebounce } from 'ahooks';
-import { Context } from '~/src/AppWrapper';
+import { Realty } from '~/src/models/Realty';
 
 interface RangeFilterPropsType {
     step: number,
@@ -15,6 +15,7 @@ interface RangeFilterPropsType {
     maxKey: NumberRealtyField;
     unit: string,
     filterName: string,
+    realties: Realty[]
     onSetFilter: (range) => void;
 }
 
@@ -25,12 +26,13 @@ const RangeFilter: FC<RangeFilterPropsType> = ({
     minKey,
     maxKey,
     unit,
+    realties,
     onSetFilter,
 }) => {
-    const { store } = useContext(Context);
+    console.log('======================!!', realties);
 
-    const [min, max] = useRealtyFieldRange(minKey, maxKey, store.realties);
-    const [range, setRange] = useState([]);
+    const [min, max] = useRealtyFieldRange(minKey, maxKey);
+    const [range, setRange] = useState([min, max]);
     const debouncedRange = useDebounce(range, { wait: 500 });
 
     const handleChangeRange = (range) => {
@@ -43,7 +45,9 @@ const RangeFilter: FC<RangeFilterPropsType> = ({
 
     return (
         <div className={rangeFilterStyles.content}>
-            <div className={rangeFilterStyles.name}>{label}</div>
+            <div className={rangeFilterStyles.name}>
+                {label}
+            </div>
 
             <InputRange
                 onChangeRange={handleChangeRange}

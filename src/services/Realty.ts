@@ -16,7 +16,11 @@ export default class RealtyService {
         return api.delete<RealtyData>(`/realty/${id}`);
     }
 
-    static async getAll(): Promise<AxiosResponse<RealtyData>> {
-        return api.get<RealtyData>(`/realties}`);
+    static async getAll(ids): Promise<AxiosResponse<RealtyData>> {
+        return api.get<RealtyData>(`/realties`, ids);
+    }
+
+    static async getById(id): Promise<AxiosResponse<RealtyData>> {
+        return api.get<RealtyData>(`/realty/${id}`);
     }
 }

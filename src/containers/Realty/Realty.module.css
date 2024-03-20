@@ -1,0 +1,63 @@
+.content {
+    margin: 40px 0 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.gallery {
+    margin: 20px 0;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    margin: 40px 0;
+    align-self: flex-start;
+}
+
+.outlinedBlock {
+    flex-direction: row;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #aaaa;
+    border-radius: 12px;
+    align-self: flex-start;
+    justify-content: space-around;
+}
+
+.roi:not(:last-child) {
+    margin-right: 20px;
+}
+
+.price {
+    margin-top: 10px;
+    /* position: sticky;
+    top: 20px;
+    right: 0; */
+    padding: 20px;
+    align-self: start;
+}
+
+.left {
+    display: block;
+    margin-right: auto;
+    flex-grow: 1;
+}
+
+.data {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.props {
+    display: flex;
+}
+
+.saveButton {
+    all: unset;
+    display: flex;
+    margin-left: 40px;
+    align-items: center;
+    cursor: pointer;
+}

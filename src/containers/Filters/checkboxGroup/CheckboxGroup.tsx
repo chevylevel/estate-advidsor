@@ -46,7 +46,7 @@ const CheckboxGroup: FC<CheckboxGroupPropsType> = ({
         <div className={checkboxGroupStyles.content}>
             <label>{label}</label>
 
-            {options.map(({ _id, name }) => (
+            {options?.map(({ _id, name }) => (
                 <div
                     key={_id}
                     style={{ display: 'flex' }}

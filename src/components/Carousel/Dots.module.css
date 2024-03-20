@@ -28,6 +28,6 @@
     transform: scale(0.85);
 }
 
-.dot:not(:last-of-type){
+.dot:not(:last-of-type) {
     margin-right: var(--dot-size);
 }

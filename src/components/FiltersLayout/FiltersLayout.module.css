@@ -11,6 +11,7 @@
 .open {
     position: sticky;
     top: 0;
+    border-bottom: 1px solid #000000;
 }
 
 .showControl {
@@ -18,7 +19,7 @@
     display: flex;
     justify-content: center;
     align-self: center;
-    top: 100%;
+    top: calc(100% - 1px);
     left: 50%;
     transform: translateX(-50%);
     width: 100px;
@@ -31,7 +32,11 @@
 
 .button {
     height: 30px;
-    background-color: #e3e3e3;
+    background-color: #ffffff;
     border: none;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-top: 2px solid #ffff;
     border-radius: 0 0 10px 10px;
 }

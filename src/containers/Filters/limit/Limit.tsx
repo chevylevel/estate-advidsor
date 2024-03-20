@@ -1,12 +1,12 @@
 import {
     ChangeEvent,
     FC,
-    useContext,
     useState,
 } from 'react';
 
 import limitStyles from './Limit.module.css';
-import { Context } from '~/src/AppWrapper';
+import { Realty } from '~/src/models/Realty';
+import { observer } from 'mobx-react-lite';
 
 interface CheckboxPropsType {
     step?: number;
@@ -14,14 +14,16 @@ interface CheckboxPropsType {
     min?: number;
     max?: number;
     filterName: string;
+    realties: Realty[]
     onSetFilter: (filter) => void;
 }
 
 const Limit: FC<CheckboxPropsType> = ({
-    onSetFilter,
     filterName,
     label,
     step = 0.25,
+    realties,
+    onSetFilter,
 }) => {
     const now = new Date();
     const minYear = now.getFullYear();
@@ -29,10 +31,8 @@ const Limit: FC<CheckboxPropsType> = ({
     const currentQuarter = Math.ceil(month / 3);
     const min = minYear + (currentQuarter * step - step);
 
-    const { store } = useContext(Context);
-
-    const max = store.realties
-        .map(({
+    const max = realties
+        ?.map(({
             constructionDeadlineYear,
             constructionDeadlineQuarter
         }) => constructionDeadlineYear + constructionDeadlineQuarter * 0.25)
@@ -76,4 +76,4 @@ const Limit: FC<CheckboxPropsType> = ({
     );
 }
 
-export default Limit;
+export default observer(Limit);

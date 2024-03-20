@@ -23,6 +23,7 @@ const FiltersLayout: FC<FilterPropsType> = ({
 }) => {
     const { ref: inViewRefTop, inView: inViewTop } = useInView();
     const { ref: inViewRefBottom, inView: inViewBottom } = useInView();
+
     const ref = useRef<HTMLDivElement>(null)
 
     const [isOpenFilters, setOpenFilters] = useState(false);
@@ -54,7 +55,7 @@ const FiltersLayout: FC<FilterPropsType> = ({
                     [filtersLayoutStyles.open]: isOpenFilters,
                 })}
                 ref={ref}
-                style={{ top: isOpenFilters ? 0 : `-${ref.current?.clientHeight + 1 }px`}}
+                style={{ top: isOpenFilters ? 0 : `-${ ref.current?.clientHeight || 0 + 1 }px`}}
             >
 
                 {children}

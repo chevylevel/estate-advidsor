@@ -1,52 +1,46 @@
-
-import PageGridLayout from '../src/components/PageGridLayout/PageGridLayout';
 import { Input } from '../src/components/Input/Input';
-import Form from '../src/components/Form/Form';
-import { MouseEvent, useEffect, useRef, useState } from 'react';
-import LocationService from '~/src/services/Location';
-import { useLocations } from '~/src/hooks/useLocations';
+import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import { IconButton } from '~/src/components/IconButton/IconButton';
 import EditIcon from '~/public/images/edit.svg';
 import DeleteIcon from '~/public/images/delete.svg';
 import useClickOutside from '~/src/hooks/useClickOutside';
+import Page from '~/src/components/Page/Page';
+import { observer } from 'mobx-react-lite';
+import { Location } from '~/src/models/Location';
+import { API_URL } from '~/config';
+import { Context } from '~/src/app/Context';
 
 
 const AdminPage = () => {
+    const { store } = useContext(Context);
     const ref = useRef<HTMLInputElement>(null);
-    const { locations, fetchLocations } = useLocations();
 
     useClickOutside(ref, handleClickOutside);
 
-    const [locationOnEdit, setLocationOnEdit] = useState(null);
+    const [locationOnEdit, setLocationOnEdit] = useState<Location | null>(null);
     const [value, setValue] = useState('');
 
     const handleAddLocation = (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.target.form);
-
-        LocationService.createLocation(formData).then(res => {
-            if (res?.status === 200) {
-                 fetchLocations();
-                 setValue('');
-            }
-        });
+        store.addLocation(formData).then(() => setValue(''));
     }
 
     const handleEditLocation = (e: MouseEvent<HTMLButtonElement>, id, name) => {
         e.preventDefault();
 
-        setLocationOnEdit({ id, name });
+        setLocationOnEdit({ _id: id, name });
     }
 
     const handleDeleteLocation = (id, e) => {
         e.preventDefault();
 
-        LocationService.deleteLocation(id).then(res => res?.status === 200 && fetchLocations());
+        store.deleteLocation(id);
     }
 
     function handleClickOutside() {
-        if (locations.some(location => location._id === locationOnEdit.id
+        if (store.locations.some(location => location._id === locationOnEdit?._id
             && location.name === locationOnEdit.name)
         ) {
             setLocationOnEdit(null);
@@ -54,22 +48,27 @@ const AdminPage = () => {
             return;
         }
 
-        LocationService.updateLocation(
-            locationOnEdit.id,
-            locationOnEdit.name,
-        ).then(res => {
-            if (res?.status === 200) {
-                fetchLocations().then(() => setLocationOnEdit(null));
-            }
-        });
+        store.updateLocation(locationOnEdit?._id, locationOnEdit?.name)
+            .then(() => { setLocationOnEdit(null) });
     }
 
-    const handleChange = (value) => {
-        setLocationOnEdit(prev => ({ ...prev, name: value }))
+    const handleChange = (id, value) => {
+        setLocationOnEdit(({ _id: id, name: value }))
     }
+
+    useEffect(
+        () => {
+            fetch(`${API_URL}/locations`).then(res => {
+                if (res.ok) {
+                    res.json().then(data => store.setLocations(data))
+                }
+            });
+        },
+        [],
+    );
 
     return (
-        <PageGridLayout>
+        <Page>
             <div style={{ display: 'flex', flexDirection: 'column', padding: '0 50px 50px'}}>
                 <h4>Locations</h4>
 
@@ -90,16 +89,19 @@ const AdminPage = () => {
                 </form>
 
                 <div style={{ padding: '20px 0' }}>
-                    {locations.map(location => (
-                        <div key={location._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            {location._id === locationOnEdit?.id
+                    {store.locations.map(location => (
+                        <div
+                            key={location._id}
+                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                        >
+                            {location._id === locationOnEdit?._id
                                 ? (
                                     <Input
                                         ref={ref}
                                         label={'name'}
                                         name={'name'}
                                         initialValue={location.name}
-                                        onChange={handleChange}
+                                        onChange={(id) => handleChange(id, location.name)}
                                     />
                                 )
                                 : <span>{location.name}</span>
@@ -118,9 +120,9 @@ const AdminPage = () => {
                     ))}
                 </div>
             </div>
-        </PageGridLayout>
+        </Page>
     );
 }
 
-export default AdminPage;
+export default observer(AdminPage);
 

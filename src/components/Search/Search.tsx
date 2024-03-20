@@ -16,23 +16,38 @@ const Search: FC<SearchPropsType> = ({children}) => {
 
     return (
         <div className={search.content}>
-            <div className={search.inputLabel}>
-                введите желаемые параметры:
-            </div>
-            <div style={{ display: 'flex' }}>
-                <textarea
-                    className={search.inputField}
-                    placeholder={'Вилла в 200 метрах от океана, на две спальни, стоимостью до $150000, в Чангу'}
-                    onChange={() => {}}
-                />
+            <div className={search.search}>
+                <div className={search.inputLabel}>
+                    введите желаемые параметры:
+                </div>
 
-                <IconButton
-                    theme='light'
-                    onClick={handleClickSearch}
-                >
-                    <SearchIcon className={search.icon}/>
-                </IconButton>
+                <div style={{ display: 'flex' }}>
+                    <textarea
+                        className={search.inputField}
+                        placeholder={'Вилла в 200 метрах от океана, на две спальни, стоимостью до $150000, в Чангу'}
+                        onChange={() => {}}
+                    />
+
+                    <IconButton
+                        theme='light'
+                        onClick={handleClickSearch}
+                    >
+                        <SearchIcon className={search.icon}/>
+                    </IconButton>
+                </div>
             </div>
+
+            <img
+                className={search.background}
+                style={{
+                    objectFit: 'cover',
+                    height: '100%',
+                    width: '100%',
+
+                }}
+                src={'/images/rice-paddies.jpg'}
+            />
+
         </div>
     );
 }

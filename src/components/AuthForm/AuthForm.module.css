@@ -1,7 +1,20 @@
-.AuthForm {
+.content {
     display: flex;
     flex-direction: column;
     background-color: #fefefe;
     position: relative;
     padding: 50px;
+}
+
+.gsiButton > div > div:first-child{
+    display: none;
+}
+
+.gsiButton {
+    position: absolute;
+    bottom: 60px;
+}
+
+.btn {
+    margin-bottom: 60px;
 }

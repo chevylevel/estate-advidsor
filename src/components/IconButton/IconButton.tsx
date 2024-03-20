@@ -4,12 +4,14 @@ import iconButton from './IconButton.module.css';
 import classNames from 'classnames';
 
 interface IconButtonPropsType {
+    id?: string;
     children: ReactNode;
     theme?: 'dark' | 'light';
     onClick: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 export const IconButton: FC<IconButtonPropsType> = ({
+    id = '',
     children,
     theme = 'dark',
     onClick,
@@ -29,6 +31,7 @@ export const IconButton: FC<IconButtonPropsType> = ({
 
     return (
         <button
+            id={id}
             ref={ref}
             className={iconButton.content}
             onClick={onClick}

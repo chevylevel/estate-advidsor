@@ -1,14 +1,22 @@
-import { RealtyCard } from '../RealtyCard/RealtyCard';
-import StyledRealtyList from './StyledRealtyList';
+import RealtyCard from '../RealtyCard/RealtyCard';
 import AddIcon from '../../../public/images/add.svg';
 import realtyList from './RealtyList.module.css';
 
 import Grid from '../Grid/Grid';
 import { IconButton } from '../IconButton/IconButton';
+import { FC } from 'react';
+import { Realty } from '../../models/Realty';
 
-const RealtyList = ({
-    realties,
-    onOpenRealtyForm
+interface RealtyListPropsType {
+    realties: Realty[];
+    withCreateControl?: boolean;
+    onOpenRealtyForm?: (realty?: Realty) => void
+}
+
+const RealtyList:FC<RealtyListPropsType> = ({
+    realties = [],
+    withCreateControl = false,
+    onOpenRealtyForm = () => {},
 }) => {
     return (
         <Grid
@@ -17,11 +25,16 @@ const RealtyList = ({
             xlCols={4}
             className={realtyList.content}
         >
-            <div className={realtyList.add}>
-                <IconButton onClick={() => onOpenRealtyForm()}>
-                    <AddIcon/>
-                </IconButton>
-            </div>
+            {withCreateControl
+                ? (
+                    <div className={realtyList.add}>
+                        <IconButton onClick={() => onOpenRealtyForm()}>
+                            <AddIcon/>
+                        </IconButton>
+                    </div>
+                )
+                : null
+            }
 
             {realties.map((realty) => (
                 <RealtyCard

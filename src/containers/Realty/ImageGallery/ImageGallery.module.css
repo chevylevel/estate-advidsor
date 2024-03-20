@@ -1,0 +1,53 @@
+.content {
+    max-height: 50vh;
+    display: flex;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mainImageContainer {
+    width: 50%;
+    padding-right: 10px;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.sideImageContainer {
+    margin: -5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: minmax(0, 50%) minmax(0, 50%);
+}
+
+.imageButton {
+    all: unset;
+    position: relative;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+}
+
+.imageButton:after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.imageButton:hover:after {
+    opacity: 0.3;
+}
+
+.sideImageButtonContainer {
+    padding: 5px;
+}

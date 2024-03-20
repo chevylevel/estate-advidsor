@@ -4,21 +4,22 @@ import { Realty } from '../models/Realty'
 
 type FiltersType = {
     price: [min?: number, max?: number],
-    withInstallment: boolean,
+    withInstallment: boolean | null,
     livingSpace: [min?: number, max?: number],
     landSquare: [min?: number, max?: number],
     ownership: string[],
     location: string[],
     type: string[],
-    withView: boolean,
-    isPossibleToStay: boolean,
+    withView: boolean | null,
+    isPossibleToStay: boolean | null,
     bedrooms: string[],
-    constructionDeadline: [year?: number, quarter?: number],
+    constructionDeadline: [year: number, quarter: number],
 }
 
 export const useFilters = (
     realties: Realty[],
 ) => {
+    console.log('filter', realties);
     const [filters, setFilters] = useState<FiltersType>({
         price: [],
         livingSpace: [],
@@ -27,7 +28,7 @@ export const useFilters = (
         location: [],
         type: [],
         bedrooms: [],
-        constructionDeadline: [],
+        constructionDeadline: [(new Date()).getFullYear() + 5, 0],
         withInstallment: null,
         withView: null,
         isPossibleToStay: null,
@@ -41,18 +42,30 @@ export const useFilters = (
 
             return (
                 (
-                    realty.priceMin ? realty.priceMin >= minPrice : true
-                        && realty.priceMax ? realty.priceMax <= maxPrice : true
+                    (realty.priceMin &&  minPrice)
+                        ? realty.priceMin >= minPrice
+                        : true
+                            && (realty.priceMax && maxPrice)
+                                ? realty.priceMax <= maxPrice
+                                : true
                 )
 
                 && (
-                    realty.landSquareMin ? realty.squareMin >= minLivingSpace : true
-                        && realty.squareMax ? realty.squareMax <= maxLivingSpace : true
+                    (realty.landSquareMin && minLivingSpace)
+                        ? realty.squareMin >= minLivingSpace
+                        : true
+                            && (realty.squareMax && maxLivingSpace)
+                                ? realty.squareMax <= maxLivingSpace
+                                : true
                 )
 
                 && (
-                    realty.landSquareMin ? realty.landSquareMin >= minLandSquare : true
-                        && realty.landSquareMax ? realty.landSquareMax <= maxLandSquare : true
+                    (realty.landSquareMin && minLandSquare)
+                        ? realty.landSquareMin >= minLandSquare
+                        : true
+                            && (realty.landSquareMax && maxLandSquare)
+                                ? realty.landSquareMax <= maxLandSquare
+                                : true
                 )
 
                 && (
@@ -94,7 +107,7 @@ export const useFilters = (
 
                 && (
                     !!filters.constructionDeadline.length && !!realty.constructionDeadlineYear
-                        ?  realty.constructionDeadlineYear <= filters.constructionDeadline[0]
+                        ? realty.constructionDeadlineYear <= filters.constructionDeadline[0]
                             && realty.constructionDeadlineQuarter <= filters.constructionDeadline[1]
                         : true
                 )
@@ -104,9 +117,11 @@ export const useFilters = (
         [filters, realties],
     );
 
-    const mergeFilters = (filter) => {
+    const mergeFilters = useCallback((filter) => {
         setFilters(prev => ({...prev, ...filter}))
-    };
+    }, [setFilters]);
+
+    console.log('filteredRealties', filteredRealties);
 
     return {
         filteredRealties,

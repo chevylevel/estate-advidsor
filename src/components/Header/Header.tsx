@@ -1,59 +1,50 @@
-import { useContext, type FC, type ReactNode } from 'react';
-
-import { Context } from '../../AppWrapper';
+import { useContext, type FC } from 'react';
 import LogoIcon from '../../../public/images/logo.svg';
 import { observer } from 'mobx-react-lite';
 import { IconButton } from '../IconButton/IconButton';
-import { Modal } from '../Modal/Modal';
-import { useModal } from '../../../src/hooks/useModal';
-import { AuthForm } from '../AuthForm/AuthForm';
 import LoginIcon from '../../../public/images/login.svg';
 import LogoutIcon from '../../../public/images/logout.svg';
 import header from './header.module.css';
+import Link from 'next/link';
+import { Typography } from '@mui/material';
+import { Context } from '~/src/app/Context';
 
 type HeaderPropsType = {
-    searchNode: ReactNode;
+    onOpenAuthForm
 }
 
 const Header: FC<HeaderPropsType> = ({
-    searchNode,
+    onOpenAuthForm,
 }) => {
     const { store } = useContext(Context);
-
-    const {
-        handleClickOpenModal: handleClickOpenAuthForm,
-        isOpen: isOpenAuthForm,
-        handleClickCloseModal: handleClickCloseAuthForm,
-    } = useModal();
 
     const authNode = (
         <div className={header.authControl}>
             {store.isAuth
                 ? (
                     <>
-                        <div className={header.text}>
+                        <Link
+                            className={header.userName}
+                            href={'/account'}
+                        >
                             {store.user?.email}
-                        </div>
+                        </Link>
 
                         <IconButton
-                            theme='light'
                             onClick={() => store.signOut()}
                         >
-                            <LogoutIcon style={{ maxHeight: '30px', fill: '#ffffff' }} />
+                            <LogoutIcon style={{ maxHeight: '30px', fill: '#6d6d6d' }} />
                         </IconButton>
                     </>
                 )
                 : (
                     <>
-                        <div className={header.text}>вход / регистрация</div>
+                        <div className={header.userName}>вход / регистрация</div>
+
                         <IconButton
-                            theme='light'
-                            onClick={handleClickOpenAuthForm}
+                            onClick={onOpenAuthForm}
                         >
-                            <LoginIcon
-                                style={{ maxHeight: '30px', fill: '#ffffff' }}
-                                // className={header.logo}
-                            />
+                            <LoginIcon style={{ maxHeight: '30px', fill: '#6d6d6d' }}/>
                         </IconButton>
                     </>
                 )
@@ -63,50 +54,30 @@ const Header: FC<HeaderPropsType> = ({
 
     return (
         <header className={header.layout}>
-            <div className={header.wrapper}>
-                <div className={header.substrate}></div>
+            <div className={header.content}>
+                <div className={header.company}>
+                    <LogoIcon className={header.logo} />
 
-                <div className={header.content}>
-                    <div className={header.company}>
-                        <LogoIcon className={header.logo} />
-
-                        <div className={header.companyName}>estate adviser</div>
-                    </div>
-
-                    <h3 className={header.title}>
-                        КАТАЛОГ ДОХОДНОЙ НЕДВИЖИМОСТИ
-                    </h3>
-
-                    {store.isLoading
-                        ? null
-                        : authNode
-                    }
-                </div>
-            </div>
-
-            <div className={header.background}>
-                <div className={header.search}>
-                    {searchNode}
+                    <Link
+                        className={header.companyName}
+                        href={'/'}
+                    >
+                        estate adviser
+                    </Link>
                 </div>
 
-                <img
-                    // className={search.background}
-                    style={{
-                        objectFit: 'cover',
-                        height: '100%',
-                        width: '100%',
+                <Typography
+                    variant={'h5'}
+                    className={header.title}
+                >
+                    profitable real estate
+                </Typography>
 
-                    }}
-                    src={'/images/rice-paddies.jpg'}
-                />
+                {store.isLoading
+                    ? null
+                    : authNode
+                }
             </div>
-
-            <Modal
-                isOpen={isOpenAuthForm}
-                onClose={handleClickCloseAuthForm}
-            >
-                <AuthForm onClose={handleClickCloseAuthForm} />
-            </Modal>
         </header>
     );
 }

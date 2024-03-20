@@ -29,7 +29,7 @@ const ConstructionDeadlineField:FC<ConstructionDeadlineFieldPropsType> = ({
                     label={'year'}
                     name={'constructionDeadlineYear'}
                     onChange={handleChangeYear}
-                    initialValue={initialRealty?.constructionDeadlineYear}
+                    initialValue={initialRealty?.constructionDeadlineYear || ''}
                 />
 
                 <div style={{ width: '50%'}}>

@@ -9,13 +9,15 @@ export const Modal = ({
     return isOpen
         ? (
             <RemoveScroll>
-                 <div className={modal.Modal}>
-                    <div className={modal.content}>
-                        <div className={modal.closeButton}>
-                            <button onClick={onClose}>&times;</button>
-                        </div>
+                 <div className={modal.substrate}>
+                    <div className={modal.wrapper}>
+                        <div className={modal.content}>
+                            <div className={modal.closeButton}>
+                                <button onClick={onClose}>&times;</button>
+                            </div>
 
-                        { children }
+                            { children }
+                        </div>
                     </div>
                 </div>
             </RemoveScroll>
